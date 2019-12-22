@@ -27,7 +27,6 @@ class ClsPersona(val idpersona: Int, val idloginTipo:Int, val nombres:String, va
         params["idlogin_tipo"] = this.idloginTipo
         params["contrasenia"] = this.contrasenia
         params["correo"] = this.email
-
         return params
     }
 
@@ -48,7 +47,7 @@ class VAR {
          val PREF_HOLA_ACTIVITY = "mostrar_hola_activity"
          val PREF_TOKEN  = "token"
          val PREF_DATA_USUARIO  = "datausuario"
-
+         val PREF_TEMP_RUTINA= "rutina_temporal"
     }
 }
 
@@ -71,7 +70,6 @@ class Validar {
             val email = getString(txt!!)
             val pat = Patterns.EMAIL_ADDRESS
             return pat.matcher(email).matches()
-
         }
 
         fun getString(txt: EditText?): String {
