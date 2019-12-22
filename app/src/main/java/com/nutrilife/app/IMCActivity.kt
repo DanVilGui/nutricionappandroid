@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
+import android.os.SystemClock
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -34,6 +35,7 @@ class IMCActivity: AppCompatActivity() {
     var valorImc:Double = 0.0
     var preguntar_actualizar_ruta = false
     var PROCESAR_AGREGAR = true
+    var lastClick: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,9 +63,12 @@ class IMCActivity: AppCompatActivity() {
 
         val btnContinuar:Button = findViewById(R.id.btnContinuar)
         btnContinuar.setOnClickListener {
-            if( PROCESAR_AGREGAR && valorImc!= 0.0 &&  cintura!=0){
-                agregarMedida()
+            if (SystemClock.elapsedRealtime() - lastClick >= 1000){
+                if( PROCESAR_AGREGAR && valorImc!= 0.0 &&  cintura!=0){
+                    agregarMedida()
+                }
             }
+            lastClick = SystemClock.elapsedRealtime()
         }
     }
 

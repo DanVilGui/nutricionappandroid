@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
+import android.os.SystemClock
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -21,6 +22,7 @@ class ActualizarMedidasActivity: AppCompatActivity() {
     var txtTamanio:EditText?=null
     var txtCadera:EditText?=null
     var txtCintura:EditText?=null
+    var lastClick: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,21 +35,25 @@ class ActualizarMedidasActivity: AppCompatActivity() {
         txtCadera = findViewById(R.id.cadera)
         val btnContinuar:Button = findViewById(R.id.btnContinuar)
         btnContinuar.setOnClickListener {
-            val valido = validarCampos()
-            if(valido){
-                val intent = Intent(applicationContext, IMCActivity::class.java)
-                val b = Bundle()
-                b.putDouble("peso",txtPeso?.text.toString().toDouble())
-                b.putDouble("medida",txtTamanio?.text.toString().toDouble())
-                b.putInt("cintura",txtCintura?.text.toString().toInt())
-                b.putInt("cadera",txtCadera?.text.toString().toInt())
-                intent.putExtras(b)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-                //finish()
-            }else{
-                Toasty.error(applicationContext, "Verifique los campos", Toast.LENGTH_LONG, true).show()
+            if (SystemClock.elapsedRealtime() - lastClick >= 1000){
+                val valido = validarCampos()
+                if(valido){
+                    val intent = Intent(applicationContext, IMCActivity::class.java)
+                    val b = Bundle()
+                    b.putDouble("peso",txtPeso?.text.toString().toDouble())
+                    b.putDouble("medida",txtTamanio?.text.toString().toDouble())
+                    b.putInt("cintura",txtCintura?.text.toString().toInt())
+                    b.putInt("cadera",txtCadera?.text.toString().toInt())
+                    intent.putExtras(b)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    //finish()
+                }else{
+                    Toasty.error(applicationContext, "Verifique los campos", Toast.LENGTH_LONG, true).show()
+                }
             }
+            lastClick = SystemClock.elapsedRealtime()
+
         }
     }
 

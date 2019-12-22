@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
+import android.os.SystemClock
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +29,8 @@ class SexoEdadActivity: AppCompatActivity() {
     var fechaNacimiento:String = ""
     var sharedPref: SharedPreferences? = null
     var PROCESAR_REGISTRAR = true
+    var lastClick: Long = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sexo_edad)
@@ -75,9 +78,6 @@ class SexoEdadActivity: AppCompatActivity() {
         }
 
 
-
-
-
         imagenMasculino.setOnClickListener {
             rbMasculino.isChecked = true
         }
@@ -101,13 +101,12 @@ class SexoEdadActivity: AppCompatActivity() {
             newFragment.show(supportFragmentManager, "datePicker")
         }
 
-        btnContinuar?.setOnClickListener{
-            if(PROCESAR_REGISTRAR){
-
+        btnContinuar.setOnClickListener{
+            if (SystemClock.elapsedRealtime() - lastClick >= 1000){
                 val sexo = if (rbFemenino.isChecked) "F" else   "M"
                 registrarSexoEdad( sexo, DatePickerFragment.fecha )
             }
-
+            lastClick = SystemClock.elapsedRealtime()
         }
     }
 

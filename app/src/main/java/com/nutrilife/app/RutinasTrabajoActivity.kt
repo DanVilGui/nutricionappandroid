@@ -3,6 +3,7 @@ package com.nutrilife.app
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.JsonReader
 import android.util.Log
 import android.view.View
@@ -30,6 +31,7 @@ class RutinasTrabajoActivity: AppCompatActivity() {
     var sharedPref: SharedPreferences? = null
 
     var rutinaAnterior:JSONObject? = null
+    var lastClick: Long = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,46 +92,45 @@ class RutinasTrabajoActivity: AppCompatActivity() {
 
         val btnContinuar:Button = findViewById(R.id.btnContinuar)
         btnContinuar.setOnClickListener {
-            if(haySeleccion()){
-                guardarTrabajo()
-            }else{
-                Toasty.error(applicationContext, "Seleccione una opción.", Toast.LENGTH_LONG, true).show()
+            if (SystemClock.elapsedRealtime() - lastClick >= 1000){
+                if(haySeleccion()){
+                    guardarTrabajo()
+                }else{
+                    Toasty.error(applicationContext, "Seleccione una opción.", Toast.LENGTH_SHORT, true).show()
+                }
             }
-            /*
-            val intent = Intent(applicationContext, RutinasTrabajoActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-             */
+            lastClick = SystemClock.elapsedRealtime()
+
         }
     }
 
 
     fun guardarTrabajo(){
         if(rutinaAnterior!=null){
-            val copiaRutina = rutinaAnterior
             listaRadioButtons?.forEach {
                 if(it.isChecked){
                     when(it.id){
 
                         R.id.rbLigero->{
-                            rutinaAnterior?.put("ligero", txtLigero?.selectedItem.toString().toInt())
+                            rutinaAnterior?.put("trabaja_ligero", txtLigero?.selectedItem.toString().toInt())
                         }
                         R.id.rbCasa->{
-                            rutinaAnterior?.put("casa", txtCasa?.selectedItem.toString().toInt())
+                            rutinaAnterior?.put("trabaja_casa", txtCasa?.selectedItem.toString().toInt())
                         }
                         R.id.rbActivo->{
-                            rutinaAnterior?.put("activo", txtActivo?.selectedItem.toString().toInt())
+                            rutinaAnterior?.put("trabaja_activo", txtActivo?.selectedItem.toString().toInt())
                         }
                         R.id.rbMuyActivo->{
-                            rutinaAnterior?.put("muyactivo", txtMuyActivo?.selectedItem.toString().toInt())
+                            rutinaAnterior?.put("trabaja_muyactivo", txtMuyActivo?.selectedItem.toString().toInt())
                         }
                         R.id.rbNinguno->{
-                            rutinaAnterior?.put("notrabaja", 1)
+                            rutinaAnterior?.put("trabaja", 0)
                         }
 
                     }
                 }
             }
+
             sharedPref?.edit {
                 putString(VAR.PREF_TEMP_RUTINA, rutinaAnterior?.toString())
             }
@@ -139,8 +140,8 @@ class RutinasTrabajoActivity: AppCompatActivity() {
                 Log.e("myerror", JSONObject(r).toString() )
             }
 
-
-
+            val intent = Intent(this, RutinasDeporteActivity::class.java)
+            startActivity(intent)
         }
 
     }

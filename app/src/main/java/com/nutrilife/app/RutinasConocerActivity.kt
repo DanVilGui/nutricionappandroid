@@ -3,13 +3,11 @@ package com.nutrilife.app
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.*
+import android.os.SystemClock
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import com.nutrilife.app.Clases.VAR
-import es.dmoral.toasty.Toasty
 import org.angmarch.views.NiceSpinner
 import org.json.JSONObject
 import java.util.*
@@ -21,6 +19,7 @@ class RutinasConocerActivity: AppCompatActivity() {
     var txtCaminar:NiceSpinner? = null
     var txtEscaleras:NiceSpinner?=null
     var sharedPref: SharedPreferences? = null
+    var lastClick: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,19 +49,19 @@ class RutinasConocerActivity: AppCompatActivity() {
 
         val btnContinuar:Button = findViewById(R.id.btnContinuar)
         btnContinuar.setOnClickListener {
-            val rutina = JSONObject()
-            rutina.put("caminar", txtCaminar?.selectedItem.toString().toInt())
-            rutina.put("escaleras", txtEscaleras?.selectedItem.toString().toInt())
-            sharedPref?.edit {
-                putString(VAR.PREF_TEMP_RUTINA, rutina.toString())
+            if (SystemClock.elapsedRealtime() - lastClick >= 1000){
+                val rutina = JSONObject()
+                rutina.put("caminar", txtCaminar?.selectedItem.toString().toInt())
+                rutina.put("escaleras", txtEscaleras?.selectedItem.toString().toInt())
+                sharedPref?.edit {
+                    putString(VAR.PREF_TEMP_RUTINA, rutina.toString())
+                }
+                val intent = Intent(applicationContext, RutinasTrabajoActivity::class.java)
+                startActivity(intent)
             }
-            val intent = Intent(applicationContext, RutinasTrabajoActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+
+            lastClick = SystemClock.elapsedRealtime()
         }
 
     }
-
-
-
 }
