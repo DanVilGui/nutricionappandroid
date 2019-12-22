@@ -139,6 +139,11 @@ class LoginActivity: AppCompatActivity() {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
                 finish()
+            }else if( data.isNull("preferencia") ){
+                val intent = Intent(applicationContext, PreferenciasActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                finish()
             }
             else{
                 val intent = Intent(applicationContext, MainActivity::class.java)

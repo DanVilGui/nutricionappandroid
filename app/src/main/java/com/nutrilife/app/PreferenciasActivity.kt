@@ -5,31 +5,26 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
-import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.RadioGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.nutrilife.app.Adapters.DeporteListAdapter
-import com.nutrilife.app.Clases.ClsDeporte
 import com.nutrilife.app.Clases.VAR
 import es.dmoral.toasty.Toasty
 import org.angmarch.views.NiceSpinner
 import org.json.JSONObject
 import java.util.*
 import java.util.Arrays.asList
-import kotlin.collections.ArrayList
 
 
-class RutinasDeporteActivity: AppCompatActivity() {
+class PreferenciasActivity: AppCompatActivity() {
 
-    var recyclerView: RecyclerView?=null
+
     var sharedPref: SharedPreferences? = null
-    var rutinaAnterior:JSONObject? = null
     var lastClick: Long = 0
     var PROCESAR_AGREGAR = true
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,77 +33,69 @@ class RutinasDeporteActivity: AppCompatActivity() {
             VAR.PREF_NAME,
             VAR.PRIVATE_MODE
         )
-        setContentView(R.layout.rutina_deportes)
+        setContentView(R.layout.preferencias_alimenticias)
         this.supportActionBar?.hide()
 
-        val rutinaStr =  sharedPref?.getString(VAR.PREF_TEMP_RUTINA,null)
-        if(rutinaStr!=null){
-            rutinaAnterior = JSONObject(rutinaStr)
+        val datasetComidas: LinkedList<String> = LinkedList(asList("0", "1","2","3", "4","5","6","7","8"))
+
+        val dataSetVasos: LinkedList<String> = LinkedList()
+        val j:Int =1
+        for(i in 1 until 21){
+            dataSetVasos.add(i.toString())
         }
 
-        val dataset: List<String> = LinkedList(asList("0", "1","2","3", "4","5","6","7","8"))
-
-        recyclerView = findViewById(R.id.recyclerView)
-        val listaDeportes:ArrayList<ClsDeporte> = ArrayList()
-        listaDeportes.add(ClsDeporte("ciclismo", "CICLISMO", dataset, 0))
-        listaDeportes.add(ClsDeporte("futbol", "FÚTBOL", dataset, 0))
-        listaDeportes.add(ClsDeporte("danza", "DANZA", dataset, 0))
-        listaDeportes.add(ClsDeporte("baloncesto", "BALONCESTO", dataset, 0))
-        listaDeportes.add(ClsDeporte("natacion", "NATACIÓN", dataset, 0))
-        listaDeportes.add(ClsDeporte("tenis", "TENIS", dataset, 0))
-        listaDeportes.add(ClsDeporte("correr", "CORRER", dataset, 0))
-
-        recyclerView?.apply {
-            layoutManager = LinearLayoutManager(applicationContext)
-            adapter = DeporteListAdapter(applicationContext,listaDeportes)
-        }
-
+        val spComida:NiceSpinner = findViewById(R.id.spComidas)
+        val spVasos:NiceSpinner = findViewById(R.id.spVasos)
+        spComida.attachDataSource(datasetComidas)
+        spVasos.attachDataSource(dataSetVasos)
+        val groupComidas :RadioGroup = findViewById(R.id.rgComida)
+        val groupDieta :RadioGroup = findViewById(R.id.rgDieta)
         val btnContinuar:Button = findViewById(R.id.btnContinuar)
         btnContinuar.setOnClickListener {
             if (SystemClock.elapsedRealtime() - lastClick >= 1000){
-                val copiaRutina = JSONObject(rutinaAnterior.toString())
-                listaDeportes.forEach {
-                    copiaRutina.put(it.tipo, it.horas)
-                }
+                val indexComidas: Int =
+                    groupComidas.indexOfChild(findViewById(groupComidas.getCheckedRadioButtonId()))
+                val indexDieta: Int =
+                    groupDieta.indexOfChild(findViewById(groupDieta.getCheckedRadioButtonId()))
 
-
+                val hizoDieta = if (indexDieta == R.id.si) 1 else 0
+                val parametros = JSONObject()
+                parametros.put("cant_comidas", spComida.selectedItem.toString().toInt())
+                parametros.put("cant_vasos", spVasos.selectedItem.toString().toInt())
+                parametros.put("comida_hambre", indexComidas +1)
+                parametros.put("hace_dieta", hizoDieta)
                 if(PROCESAR_AGREGAR){
-                  actualizarRutina(copiaRutina)
+                    actualizarPreferencia(parametros)
                 }
-
-
             }
             lastClick = SystemClock.elapsedRealtime()
 
         }
 
 
-
-
     }
-    fun actualizarRutina(parameters:JSONObject){
+    fun actualizarPreferencia(parameters:JSONObject){
         PROCESAR_AGREGAR = false
-
 
         Log.e("myerror", parameters.toString())
 
         val request : JsonObjectRequest = object : JsonObjectRequest(
-            Method.POST, VAR.url("persona_registrar_rutina"),parameters,
+            Method.POST, VAR.url("persona_registrar_preferencia"),parameters,
             Response.Listener { response ->
                 if(response!=null){
                     val success = response.getBoolean("success")
                     val message = response.getString("message")
                     if(success){
-                        val rutina = response.getJSONObject("rutina")
+                        val rutina = response.getJSONObject("preferencia")
                         val datosPersona = sharedPref?.getString(VAR.PREF_DATA_USUARIO, "")
                         val data = JSONObject(datosPersona)
-                        data.put("rutina", rutina)
+                        data.put("preferencia", rutina)
                         sharedPref?.edit {
                             putString(VAR.PREF_DATA_USUARIO, data.toString())
                         }
                         Log.e("myerror", data.toString())
                         Toasty.success(applicationContext, message, Toast.LENGTH_SHORT, true).show()
-                        actualizarPreferencias()
+                        mostrarCalorias()
                     }else{
                         Toasty.warning(applicationContext, message, Toast.LENGTH_SHORT, true).show()
                     }
@@ -141,11 +128,10 @@ class RutinasDeporteActivity: AppCompatActivity() {
         requestQueue.add(request)
     }
 
-    fun actualizarPreferencias(){
-        val intent = Intent(applicationContext, PreferenciasActivity::class.java)
+    fun mostrarCalorias(){
+        val intent = Intent(applicationContext, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
         finish()
     }
-
 }
