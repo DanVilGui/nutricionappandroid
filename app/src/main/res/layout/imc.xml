@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/fondoimc"
+    android:layout_gravity="center"
+    android:gravity="center"
+    >
+
+    <TextView
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:justificationMode="inter_word"
+        android:text="Te hemos evaluado,  tu IMC es :"
+        android:textColor="@color/textBLack"
+        android:textAlignment="center"
+        ></TextView>
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:background="@drawable/circuloimc"
+        android:layout_width="175dp"
+        android:layout_height="175dp">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/imc"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="33sp"
+                android:textStyle="bold"
+                android:justificationMode="inter_word"
+                android:text="29.99"
+                android:textColor="@color/textBLack"
+                ></TextView>
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/imcTipo"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:text="Tipo del imc"
+        android:textColor="@color/textBLack"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        ></TextView>
+    <TextView
+        android:id="@+id/imcTexto"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:text="Texto del imc"
+        android:textColor="@color/textBLack"
+        android:textAlignment="center"
+        ></TextView>
+
+    <Button
+        android:layout_marginTop="15dp"
+        android:id="@+id/btnContinuar"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_radio_principal"
+        android:text="Continuar"
+        android:textColor="@color/textBLack"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        />
+</LinearLayout>

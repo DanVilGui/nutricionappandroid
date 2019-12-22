@@ -1,0 +1,153 @@
+package com.nutrilife.app
+
+import android.content.Intent
+import android.content.SharedPreferences
+import android.os.Bundle
+import android.os.Handler
+import android.util.Log
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
+import com.nutrilife.app.Clases.ClsIMC
+import com.nutrilife.app.Clases.VAR
+import com.nutrilife.app.Clases.Validar
+import es.dmoral.toasty.Toasty
+import org.json.JSONObject
+import java.util.HashMap
+
+
+class IMCActivity: AppCompatActivity() {
+
+    var sharedPref: SharedPreferences? = null
+    var peso:Double = 1.0
+    var medida:Double = 1.0
+    var cintura:Int = 0
+    var cadera:Int = 0
+    var valorImc:Double = 0.0
+    var preguntar_actualizar_ruta = false
+    var PROCESAR_AGREGAR = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.imc)
+        this.supportActionBar?.hide()
+        sharedPref = getSharedPreferences(
+            VAR.PREF_NAME,
+            VAR.PRIVATE_MODE
+        )
+        val lblIMC:TextView = findViewById(R.id.imc)
+        val lblIMCTipo:TextView = findViewById(R.id.imcTipo)
+        val b = intent.extras
+        if(b!=null){
+            peso = b.getDouble("peso")
+            medida = b.getDouble("medida")
+            cintura = b.getInt("cintura")
+            cadera = b.getInt("cadera")
+            preguntar_actualizar_ruta = b.getBoolean("preguntar", false)
+            val imc = ClsIMC(peso, medida)
+            imc.calcular()
+            valorImc = imc.imc
+            lblIMC.text = imc.imc.toString()
+            lblIMCTipo.text=imc.estado
+        }
+
+        val btnContinuar:Button = findViewById(R.id.btnContinuar)
+        btnContinuar.setOnClickListener {
+            if( PROCESAR_AGREGAR && valorImc!= 0.0 &&  cintura!=0){
+                agregarMedida()
+            }
+        }
+    }
+
+
+
+    fun agregarMedida(){
+        PROCESAR_AGREGAR = false
+
+        val parameters = JSONObject()
+        parameters.put("peso", peso)
+        parameters.put("medida", medida)
+        parameters.put("cintura", cintura)
+        parameters.put("cadera", cadera)
+        parameters.put("imc", valorImc)
+
+        val request : JsonObjectRequest = object : JsonObjectRequest(
+                Method.POST, VAR.url("persona_agregar_medida"),parameters,
+                Response.Listener { response ->
+                    if(response!=null){
+                        val success = response.getBoolean("success")
+                        val message = response.getString("message")
+                        if(success){
+                            val medidas = response.getJSONArray("medidas")
+                            val datosPersona = sharedPref?.getString(VAR.PREF_DATA_USUARIO, "")
+                            val data = JSONObject(datosPersona)
+                            data.put("medidas", medidas)
+                            sharedPref?.edit {
+                                putString(VAR.PREF_DATA_USUARIO, data.toString())
+                            }
+                            Toasty.success(applicationContext, message, Toast.LENGTH_LONG, true).show()
+                            mostrarActualizarRutina()
+                        }else{
+                            Toasty.warning(applicationContext, message, Toast.LENGTH_LONG, true).show()
+                        }
+
+                        PROCESAR_AGREGAR = true
+                    }
+
+                },
+                Response.ErrorListener{
+                    try {
+                        PROCESAR_AGREGAR = true
+                        Toasty.error(applicationContext, "Error de conexión.", Toast.LENGTH_LONG, true).show()
+                        Log.e("myerror",  (it.message))
+                        val nr = it.networkResponse
+                        val r = String(nr.data)
+                    }catch (ex:Exception){
+                        Log.e("myerror", ex.message.toString())
+
+                    }
+
+                }) {
+                override fun getHeaders(): Map<String, String> {
+                    var params: MutableMap<String, String> = HashMap()
+                    params["TOKEN"] =  sharedPref?.getString("token", "")!!
+                    return params
+                }
+            }
+
+            val requestQueue = Volley.newRequestQueue(this)
+            requestQueue.add(request)
+    }
+
+    fun mostrarActualizarRutina(){
+        val datosPersona = sharedPref?.getString(VAR.PREF_DATA_USUARIO, "")
+        if(datosPersona!=""){
+            val data = JSONObject(datosPersona)
+            if( data.isNull("rutina") ){
+                val intent = Intent(applicationContext, RutinasConocerActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                finish()
+            } else{
+                /*
+                    enviar a preferencias !!!
+                 */
+                val intent = Intent(applicationContext, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                finish()
+            }
+        }
+    }
+
+
+
+}

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/login_main"
+    android:layout_gravity="center"
+    android:gravity="center"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="60sp"
+        android:text="!Hola!"
+        android:textStyle="bold"
+        android:textColor="@color/textBLack"
+        ></TextView>
+
+    <include
+        android:layout_gravity="center"
+        layout="@layout/logo"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginBottom="50dp"/>
+
+
+    <TextView
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:justificationMode="inter_word"
+        android:text="Gracias por elegir NutriLife, te brindaremos una dieta personalizada para ayudarte a mejorar tus hábitos de alimentación y tener un estilo de vida más saludable."
+        android:textColor="@color/textBLack"
+        android:gravity="left|center|right" android:textStyle="normal" android:textAlignment="center"
+        ></TextView>
+
+    <Button
+        android:layout_marginTop="30dp"
+        android:id="@+id/btnEmpezar"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_radio_principal"
+        android:text="Empezar"
+        android:textColor="@color/textBLack"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        />
+</LinearLayout>

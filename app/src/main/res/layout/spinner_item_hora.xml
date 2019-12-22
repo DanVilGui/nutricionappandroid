@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/texto"
+    android:background="@drawable/spinner_hora_background"
+    android:layout_width="match_parent"
+    android:layout_height="35dp"
+    android:layout_margin="0dp"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:textColor="@color/textBLack"
+    android:textStyle="bold"
+    android:textSize="14sp"
+    android:text="Text Here">
+</TextView>

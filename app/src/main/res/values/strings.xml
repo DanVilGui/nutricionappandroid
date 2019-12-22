@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Nutrilife</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="facebook_app_id">830737484024931</string>
+    <string name="fb_login_protocol_scheme">fb830737484024931</string>
+    <string-array name="ceroAOcho">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+</resources>
