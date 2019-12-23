@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/fondoevaluacion"
+    android:layout_gravity="center"
+    android:gravity="center"
+    >
+
+    <TextView
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:text="te da la bienvenida"
+        android:textColor="@color/colorAccent"
+        android:textAlignment="center"
+        ></TextView>
+
+    <TextView
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Se ha generado una dieta especial para ti, Nutrilife te hará controles regulares, así podremos evaluar tus progresos"
+        android:textColor="@color/textBLack"
+        android:textAlignment="center"
+        android:gravity="center"
+        ></TextView>
+    <TextView
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Tú tienes el control sobre tu cuerpo"
+        android:textColor="@color/colorRed"
+        android:textAlignment="center"
+        android:gravity="center"
+        ></TextView>
+    <TextView
+        android:layout_marginTop="7dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="¡Aliméntate saludablemente!"
+        android:textColor="@color/colorRed"
+        android:textAlignment="center"
+        android:gravity="center"
+        ></TextView>
+
+    <Button
+        android:layout_marginTop="25dp"
+        android:id="@+id/btnContinuar"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_radio_principal"
+        android:text="VER PLAN ALIMENTICIO"
+        android:textColor="@color/textBLack"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        />
+</LinearLayout>

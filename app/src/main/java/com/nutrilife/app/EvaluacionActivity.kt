@@ -55,7 +55,9 @@ class EvaluacionActivity: AppCompatActivity() {
         btnContinuar.setOnClickListener {
             if (SystemClock.elapsedRealtime() - lastClick >= 1000){
                 if(PROCESAR_AGREGAR){
-                    //procesarAlgoritmo()
+                    val intent = Intent(applicationContext, EvaluacionVerPlanActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 }
             }
             lastClick = SystemClock.elapsedRealtime()
@@ -64,6 +66,9 @@ class EvaluacionActivity: AppCompatActivity() {
     }
 
     fun procesarAlgoritmo(){
+        loadingDialog?.setCancelable(false)
+        loadingDialog?.setCanceledOnTouchOutside(false)
+
         loadingDialog?.show()
         PROCESAR_AGREGAR = false
         val request : JsonObjectRequest = object : JsonObjectRequest(
@@ -77,15 +82,23 @@ class EvaluacionActivity: AppCompatActivity() {
                         val kcal = response.getInt("kcal")
                         txtKcal?.text = kcal.toString()
                         Toasty.success(applicationContext, message, Toast.LENGTH_SHORT, true).show()
-                        val intent = Intent(applicationContext, MainActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                        startActivity(intent)
-                        finish()
+
+                        val datosPersona = sharedPref?.getString(VAR.PREF_DATA_USUARIO, "")
+                        if(datosPersona!="") {
+                            val data = JSONObject(datosPersona)
+                            val rutina = data.getJSONObject("rutina")
+                            rutina.put("recalcular", 0)
+                            data.put("rutina", rutina)
+                            sharedPref?.edit {
+                                putString(VAR.PREF_DATA_USUARIO, data.toString())
+                            }
+                            PROCESAR_AGREGAR = true
+                        }
                     }else{
+                        PROCESAR_AGREGAR = false
                         loadingDialog?.dismiss()
                         Toasty.warning(applicationContext, message, Toast.LENGTH_SHORT, true).show()
                     }
-                    PROCESAR_AGREGAR = true
                 }
 
             },

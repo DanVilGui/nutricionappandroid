@@ -49,6 +49,6 @@ class SplashActivity: AppCompatActivity() {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
             finish()
-        }, 2000)
+        }, 1700)
     }
 }
