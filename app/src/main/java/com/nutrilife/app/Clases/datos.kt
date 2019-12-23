@@ -35,19 +35,19 @@ class ClsPersona(val idpersona: Int, val idloginTipo:Int, val nombres:String, va
 class VAR {
     companion object {
 
-        val url: String = "http://192.168.1.109/nutricion/ws/"
+        val url: String = "http://192.168.1.110/nutricion/ws/"
         var ext: String = ".php"
 
         fun url(m: String): String {
             return url +  m + ext
         }
 
-         val PRIVATE_MODE = 0
-         val PREF_NAME = "nutrilife-app"
-         val PREF_HOLA_ACTIVITY = "mostrar_hola_activity"
-         val PREF_TOKEN  = "token"
-         val PREF_DATA_USUARIO  = "datausuario"
-         val PREF_TEMP_RUTINA= "rutina_temporal"
+        val PRIVATE_MODE = 0
+        val PREF_NAME = "nutrilife-app"
+        val PREF_HOLA_ACTIVITY = "mostrar_hola_activity"
+        val PREF_TOKEN  = "token"
+        val PREF_DATA_USUARIO  = "datausuario"
+        val PREF_TEMP_RUTINA= "rutina_temporal"
     }
 }
 
