@@ -1,11 +1,11 @@
 package com.nutrilife.app
 
 import `in`.championswimmer.libsocialbuttons.BtnSocial
+import android.R.attr
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
@@ -14,10 +14,14 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.facebook.*
-import com.facebook.appevents.AppEventsLogger
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.facebook.login.widget.LoginButton
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.nutrilife.app.Clases.ClsLoginTipo
 import com.nutrilife.app.Clases.ClsPersona
 import com.nutrilife.app.Clases.VAR
@@ -31,12 +35,18 @@ class LoginActivity: AppCompatActivity() {
 
     var sharedPref: SharedPreferences? = null
     var callbackManager: CallbackManager? = null
+    var mGoogleSignInClient:GoogleSignInClient? = null
     override fun onCreate(savedInstanceState: Bundle?) {
-
 
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_main)
+        val gso =
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build()
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+
         this.supportActionBar?.hide()
 
         callbackManager = CallbackManager.Factory.create()
@@ -62,6 +72,11 @@ class LoginActivity: AppCompatActivity() {
             LoginManager.getInstance()
                 .logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
         }
+        val btnLoginGoogle:BtnSocial = findViewById(R.id.btnLoginGoogle)
+        btnLoginGoogle.setOnClickListener {
+            val signInIntent: Intent = mGoogleSignInClient!!.getSignInIntent()
+            startActivityForResult(signInIntent, 101)
+        }
     }
 
     override fun onActivityResult(
@@ -69,8 +84,15 @@ class LoginActivity: AppCompatActivity() {
         resultCode: Int,
         data: Intent?
     ) {
-        callbackManager!!.onActivityResult(requestCode, resultCode, data)
+
         super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode === 101) {
+            val task: Task<GoogleSignInAccount> =
+                GoogleSignIn.getSignedInAccountFromIntent(data)
+            loginGoogle(task)
+        }else{
+            callbackManager!!.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
     fun loginFacebook(){
@@ -116,6 +138,32 @@ class LoginActivity: AppCompatActivity() {
             override fun onError(exception: FacebookException) { // App code
             }
         })
+    }
+
+    fun loginGoogle(completedTask:Task<GoogleSignInAccount>){
+
+        try {
+            val account = completedTask.getResult(ApiException::class.java)
+
+                val nombres = account?.givenName
+            val apellidos = account?.familyName
+            val correo = account?.email
+            val idtipo = ClsLoginTipo.GOOGLE
+
+            /*
+            val image =
+                `object`.getJSONObject("picture").getJSONObject("data")
+                    .getString("url")
+
+             */
+
+            val persona = ClsPersona(-1,idtipo,nombres!!, apellidos!!, correo!!)
+            registrarPersonaServicio(persona)
+        } catch ( e:Exception) {
+
+            Log.e("myerror", "signInResult:failed code=" + e.message)
+        }
+
     }
 
     fun mostrarMainActivity(){

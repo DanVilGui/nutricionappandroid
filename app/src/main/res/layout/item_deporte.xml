@@ -4,8 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="3dp"
-    android:layout_marginBottom="3dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
     android:orientation="horizontal">
 
 
@@ -32,7 +32,7 @@
     <org.angmarch.views.NiceSpinner
         android:id="@+id/spDeporte"
         android:layout_width="85dp"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/heightSpinner"
         android:layout_marginLeft="10dp"
         android:background="@drawable/custom_spn_background"
         android:padding="0dp"

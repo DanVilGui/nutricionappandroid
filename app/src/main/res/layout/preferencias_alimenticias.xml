@@ -31,10 +31,10 @@
             android:id="@+id/style"
             android:layout_width="210dp"
             android:layout_height="match_parent"
-            android:gravity="left|center_vertical"
+            android:gravity="center"
             android:text="¿Cuántas comidas ingieres al día?"
             android:textColor="@color/textBLack"
-            android:textSize="13sp"
+            android:textSize="@dimen/size_rutina_trabajo_tit1"
             android:textStyle="bold"></TextView>
 
         <org.angmarch.views.NiceSpinner
@@ -43,7 +43,7 @@
             android:layout_marginLeft="10dp"
             android:id="@+id/spComidas"
             android:layout_width="80dp"
-            android:layout_height="40dp"
+            android:layout_height="@dimen/heightSpinner"
             android:padding="0dp"
             app:dropDownListPaddingBottom="0dp"
             android:textAlignment="center"
@@ -72,10 +72,10 @@
         <TextView
             android:layout_width="210dp"
             android:layout_height="match_parent"
-            android:gravity="left|center_vertical"
+            android:gravity="center"
             android:text="¿Cuántos vasos de agua ingieres al día?"
             android:textColor="@color/textBLack"
-            android:textSize="13sp"
+            android:textSize="@dimen/size_rutina_trabajo_tit1"
             android:textStyle="bold"></TextView>
 
         <org.angmarch.views.NiceSpinner
@@ -84,7 +84,7 @@
             android:layout_marginLeft="10dp"
             android:id="@+id/spVasos"
             android:layout_width="80dp"
-            android:layout_height="40dp"
+            android:layout_height="@dimen/heightSpinner"
             android:padding="0dp"
             app:dropDownListPaddingBottom="0dp"
             android:textAlignment="center"
@@ -116,7 +116,7 @@
         android:text="¿Qué prefieres comer por si te da hambre durante el día?"
         android:textAlignment="center"
         android:textColor="@color/textBLack"
-        android:textSize="13sp"
+        android:textSize="@dimen/size_rutina_trabajo_tit1"
         android:textStyle="bold"></TextView>
 
 
@@ -135,7 +135,7 @@
                 android:id="@+id/rg1"
                 android:scaleX="0.85"
                 android:scaleY="0.85"
-                android:textSize="14sp"
+                android:textSize="@dimen/size_rutina_trabajo_tit2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Fruta"
@@ -144,7 +144,7 @@
                 android:id="@+id/rg2"
                 android:scaleX="0.85"
                 android:scaleY="0.85"
-                android:textSize="14sp"
+                android:textSize="@dimen/size_rutina_trabajo_tit2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Comida Rápida"
@@ -153,17 +153,16 @@
                 android:id="@+id/rg3"
                 android:scaleX="0.85"
                 android:scaleY="0.85"
-                android:textSize="14sp"
+                android:textSize="@dimen/size_rutina_trabajo_tit2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Golosinas"
                 />
             <RadioButton
                 android:id="@+id/rg4"
-
                 android:scaleX="0.85"
                 android:scaleY="0.85"
-                android:textSize="14sp"
+                android:textSize="@dimen/size_rutina_trabajo_tit2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Cereales"
@@ -172,7 +171,7 @@
                 android:id="@+id/rg5"
                 android:scaleX="0.85"
                 android:scaleY="0.85"
-                android:textSize="14sp"
+                android:textSize="@dimen/size_rutina_trabajo_tit2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="No como algo extra durante el día"
@@ -191,7 +190,7 @@
         android:text="¿Sigues actualmente alguna dieta?"
         android:textAlignment="center"
         android:textColor="@color/textBLack"
-        android:textSize="13sp"
+        android:textSize="@dimen/size_rutina_trabajo_tit1"
         android:textStyle="bold"></TextView>
 
 
@@ -211,7 +210,7 @@
                 android:id="@+id/si"
                 android:scaleX="0.85"
                 android:scaleY="0.85"
-                android:textSize="14sp"
+                android:textSize="@dimen/size_rutina_trabajo_tit2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="SI"
@@ -220,7 +219,7 @@
                 android:id="@+id/no"
                 android:scaleX="0.85"
                 android:scaleY="0.85"
-                android:textSize="14sp"
+                android:textSize="@dimen/size_rutina_trabajo_tit2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="NO"

@@ -16,8 +16,8 @@ class SplashActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash)
         this.supportActionBar?.hide()
-        FacebookSdk.sdkInitialize(applicationContext)
-        AppEventsLogger.activateApp(applicationContext)
+  //      FacebookSdk.sdkInitialize(this)
+//        AppEventsLogger.activateApp(this)
 
 
         val sharedPref: SharedPreferences = getSharedPreferences(

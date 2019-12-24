@@ -56,7 +56,7 @@
             </RadioButton>
 
             <LinearLayout
-                android:layout_width="190dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="vertical">
@@ -67,22 +67,22 @@
                     android:gravity="left"
                     android:text="TRABAJO LIGERO"
                     android:textColor="@color/textBLack"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/size_rutina_trabajo_tit1"
                     android:textStyle="bold"></TextView>
 
                 <TextView
-                    android:layout_width="190dp"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:text="(Oficina, Estudio, Computación, Comercio, etc)"
                     android:textColor="@color/textBLack"
-                    android:textSize="11sp"></TextView>
+                    android:textSize="@dimen/size_rutina_trabajo_tit2"></TextView>
             </LinearLayout>
 
             <org.angmarch.views.NiceSpinner
                 android:id="@+id/sp_ligero"
                 android:layout_width="85dp"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/heightSpinner"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/custom_spn_background"
                 android:padding="0dp"
@@ -109,7 +109,7 @@
             </RadioButton>
 
             <LinearLayout
-                android:layout_width="190dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="vertical">
@@ -120,22 +120,22 @@
                     android:gravity="left"
                     android:text="TRABAJO DE CASA"
                     android:textColor="@color/textBLack"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/size_rutina_trabajo_tit1"
                     android:textStyle="bold"></TextView>
 
                 <TextView
-                    android:layout_width="190dp"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:text="(Barrer, cocinar, planchar, etc.)"
                     android:textColor="@color/textBLack"
-                    android:textSize="12sp"></TextView>
+                    android:textSize="@dimen/size_rutina_trabajo_tit2"></TextView>
             </LinearLayout>
-
+            
             <org.angmarch.views.NiceSpinner
                 android:id="@+id/sp_casa"
                 android:layout_width="85dp"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/heightSpinner"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/custom_spn_background"
                 android:padding="0dp"
@@ -162,7 +162,7 @@
             </RadioButton>
 
             <LinearLayout
-                android:layout_width="190dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="vertical">
@@ -173,23 +173,23 @@
                     android:gravity="left"
                     android:text="TRABAJO ACTIVO"
                     android:textColor="@color/textBLack"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/size_rutina_trabajo_tit1"
                     android:textStyle="bold"></TextView>
 
                 <TextView
-                    android:layout_width="190dp"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:text="(Industria Ligera, contrucción, etc)"
                     android:textColor="@color/textBLack"
-                    android:textSize="11sp"></TextView>
+                    android:textSize="@dimen/size_rutina_trabajo_tit2"></TextView>
             </LinearLayout>
 
             <org.angmarch.views.NiceSpinner
                 android:id="@+id/spActivo"
 
                 android:layout_width="85dp"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/heightSpinner"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/custom_spn_background"
                 android:padding="0dp"
@@ -215,7 +215,7 @@
             </RadioButton>
 
             <LinearLayout
-                android:layout_width="190dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="vertical">
@@ -226,16 +226,16 @@
                     android:gravity="left"
                     android:text="TRABAJO MUY ACTIVO"
                     android:textColor="@color/textBLack"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/size_rutina_trabajo_tit1"
                     android:textStyle="bold"></TextView>
 
                 <TextView
-                    android:layout_width="190dp"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:text="(Industria Ligera, contrucción, etc)"
                     android:textColor="@color/textBLack"
-                    android:textSize="11sp"
+                    android:textSize="@dimen/size_rutina_trabajo_tit2"
                     tools:text="(Mineros, atletas, bailarines, etc)"></TextView>
             </LinearLayout>
 
@@ -243,7 +243,7 @@
                 android:id="@+id/spMuyActivo"
 
                 android:layout_width="85dp"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/heightSpinner"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/custom_spn_background"
                 android:padding="0dp"
@@ -280,7 +280,7 @@
                     android:gravity="left"
                     android:text="NO REALIZO NINGUN TIPO DE TRABAJO"
                     android:textColor="@color/textBLack"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/size_rutina_trabajo_tit1"
                     android:textStyle="bold"></TextView>
 
             </LinearLayout>

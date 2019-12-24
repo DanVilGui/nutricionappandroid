@@ -53,17 +53,17 @@
             android:textColor="@color/textBLack"
             android:gravity="center"
             ></TextView>
+
         <org.angmarch.views.NiceSpinner
-            android:background="@drawable/custom_spn_background"
-            android:textSize="15sp"
-            android:layout_marginLeft="10dp"
             android:id="@+id/sp_caminar"
             android:layout_width="80dp"
-            android:layout_height="40dp"
+            android:layout_height="@dimen/heightSpinner"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/custom_spn_background"
             android:padding="0dp"
-            app:dropDownListPaddingBottom="0dp"
             android:textAlignment="center"
-            />
+            android:textSize="15sp"
+            app:dropDownListPaddingBottom="0dp" />
 
 
         <!--
@@ -84,7 +84,7 @@
         <TextView
 
             android:layout_width="190dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:textSize="15sp"
             android:textStyle="bold"
             android:text="BAJAR/SUBIR ESCALERAS"
@@ -93,16 +93,15 @@
             ></TextView>
 
         <org.angmarch.views.NiceSpinner
-            android:background="@drawable/custom_spn_background"
-            android:textSize="15sp"
-            android:layout_marginLeft="10dp"
             android:id="@+id/sp_escaleras"
             android:layout_width="80dp"
-            android:layout_height="40dp"
+            android:layout_height="43dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/custom_spn_background"
             android:padding="0dp"
-            app:dropDownListPaddingBottom="0dp"
             android:textAlignment="center"
-           />
+            android:textSize="15sp"
+            app:dropDownListPaddingBottom="0dp" />
 
         <!--
         <EditText

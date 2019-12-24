@@ -59,13 +59,14 @@ class PreferenciasActivity: AppCompatActivity() {
         val groupComidas :RadioGroup = findViewById(R.id.rgComida)
         val groupDieta :RadioGroup = findViewById(R.id.rgDieta)
         val btnContinuar:Button = findViewById(R.id.btnContinuar)
+
+
         btnContinuar.setOnClickListener {
             if (SystemClock.elapsedRealtime() - lastClick >= 1000){
                 val indexComidas: Int =
                     groupComidas.indexOfChild(findViewById(groupComidas.getCheckedRadioButtonId()))
                 val indexDieta: Int =
                     groupDieta.indexOfChild(findViewById(groupDieta.getCheckedRadioButtonId()))
-
                 val hizoDieta = if (indexDieta == R.id.si) 1 else 0
                 val parametros = JSONObject()
                 parametros.put("cant_comidas", spComida.selectedItem.toString().toInt())

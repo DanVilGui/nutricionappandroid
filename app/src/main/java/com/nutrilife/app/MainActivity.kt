@@ -17,8 +17,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         this.supportActionBar?.hide()
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        FacebookSdk.sdkInitialize(this)
-        AppEventsLogger.activateApp(this)
+  //      FacebookSdk.sdkInitialize(this)
+//        AppEventsLogger.activateApp(this)
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
