@@ -19,6 +19,7 @@ class DeporteListAdapter(val act : Context, val list: List<ClsDeporte>)
     override fun onBindViewHolder(holder: DeporteViewHolder, position: Int) {
         val deporte:ClsDeporte = list[position]
         holder.bind(act,deporte)
+
     }
 
     override fun getItemCount(): Int = list.size
