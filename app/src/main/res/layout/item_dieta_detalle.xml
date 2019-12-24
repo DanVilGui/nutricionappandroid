@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    >
+    <LinearLayout
+        android:padding="7dp"
+        android:orientation="horizontal"
+        android:background="@drawable/border_detalle_dieta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/cantidad"
+            android:layout_marginLeft="10dp"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="100"
+            android:textColor="@color/textBLack"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical|right"
+            ></TextView>
+        <TextView
+            android:id="@+id/medida"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="gr."
+            android:textColor="@color/textBLack"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical|right"
+            ></TextView>
+        <TextView
+            android:layout_marginLeft="6dp"
+            android:id="@+id/producto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="QUINUA COCIDA"
+            android:textColor="@color/textBLack"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical|left"
+            ></TextView>
+    </LinearLayout>
+
+</LinearLayout>

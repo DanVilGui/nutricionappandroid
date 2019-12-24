@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_hoy"
-        android:name="com.nutrilife.app.ui.home.HomeFragment"
+        android:name="com.nutrilife.app.Fragments.HoyFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_hoy" />
 
     <fragment
         android:id="@+id/navigation_progreso"
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_menu"
-        android:name="com.nutrilife.app.ui.notifications.NotificationsFragment"
+        android:name="com.nutrilife.app.Fragments.MenuFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 </navigation>

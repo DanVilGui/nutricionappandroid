@@ -35,7 +35,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textStyle="bold"
                     android:text="Peso:"
                     android:textColor="@color/textBLack"
@@ -47,7 +47,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     android:text="IMC:"
                     android:textColor="@color/textBLack"
                     android:layout_gravity="left"
@@ -64,7 +64,7 @@
                     android:layout_gravity="left"
                     android:text="Altura:"
                     android:textColor="@color/textBLack"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textStyle="bold"></TextView>
 
                 <TextView
@@ -72,7 +72,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     android:text="IMC:"
                     android:textColor="@color/textBLack"
                     android:layout_gravity="left"
@@ -88,7 +88,7 @@
                     android:layout_gravity="left"
                     android:text="IMC:"
                     android:textColor="@color/textBLack"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textStyle="bold"></TextView>
 
                 <TextView
@@ -96,7 +96,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     android:text="IMC:"
                     android:textColor="@color/textBLack"
                     android:layout_gravity="left"
@@ -108,7 +108,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textStyle="bold"
                     android:text="Estado:"
                     android:textColor="@color/textBLack"
@@ -120,7 +120,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     android:text="IMC:"
                     android:textColor="@color/textBLack"
                     android:layout_gravity="left"
@@ -132,7 +132,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textStyle="bold"
                     android:text="Cintura:"
                     android:textColor="@color/textBLack"
@@ -144,7 +144,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     android:text="IMC:"
                     android:textColor="@color/textBLack"
                     android:layout_gravity="left"
@@ -156,7 +156,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textStyle="bold"
                     android:text="Cadera:"
                     android:textColor="@color/textBLack"
@@ -169,7 +169,7 @@
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     android:text="IMC:"
                     android:textColor="@color/textBLack"
                     android:layout_gravity="left"
