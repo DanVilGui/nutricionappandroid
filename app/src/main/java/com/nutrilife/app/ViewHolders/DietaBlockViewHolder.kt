@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.TextView
@@ -24,11 +25,13 @@ class DietaBlockViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     var nContenido: LinearLayout? =null
     var nTitulo:TextView? = null
     var nDietasHorario:RecyclerView ? =null
+    var nIconMostrar:ImageView? = null
     init {
         nContenedor = itemView.findViewById(R.id.expandible)
         nContenido = itemView.findViewById(R.id.contenido)
         nTitulo = itemView.findViewById(R.id.titulo)
         nDietasHorario = itemView.findViewById(R.id.dietahorario)
+        nIconMostrar = itemView.findViewById(R.id.iconmostrar)
     }
 
 }

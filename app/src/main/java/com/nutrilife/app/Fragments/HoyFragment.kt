@@ -1,11 +1,14 @@
 package com.nutrilife.app.Fragments
 
+import android.app.DatePickerDialog
 import android.content.SharedPreferences
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.edit
@@ -25,10 +28,16 @@ import com.nutrilife.app.Adapters.DietaBlockListAdapter
 import com.nutrilife.app.Adapters.MedidaListAdapter
 import com.nutrilife.app.Adapters.MenuListAdapter
 import com.nutrilife.app.Clases.*
+import com.nutrilife.app.MainActivity
 import com.nutrilife.app.R
+import com.nutrilife.app.SexoEdadActivity
 import es.dmoral.toasty.Toasty
+import kotlinx.android.synthetic.main.fragment_hoy.*
 import kotlinx.android.synthetic.main.rutina_deportes.*
 import org.json.JSONObject
+import java.text.DateFormatSymbols
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.Arrays.asList
 import kotlin.collections.ArrayList
@@ -39,7 +48,8 @@ class HoyFragment : Fragment() {
     var adaptador :DietaBlockListAdapter ? = null
     var swipeRefreshLayout:SwipeRefreshLayout? = null
     var listaDietas :LinkedList<ClsDietaBlock> = LinkedList()
-    var txtNombre:TextView?=null
+    var txtFechaFormat:TextView?=null
+    var recyclerView:RecyclerView ? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,8 +60,9 @@ class HoyFragment : Fragment() {
             VAR.PREF_NAME,
             VAR.PRIVATE_MODE
         )
-
-      //  txtNombre = view.findViewById(R.id.nombre)
+        MainActivity.DatePickerActivityFragment.fechaHoy()
+        recyclerView = view.findViewById(R.id.recyclerView)
+       txtFechaFormat = view.findViewById(R.id.fecha)
         val recyclerView:RecyclerView = view.findViewById(R.id.recyclerView)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
         swipeRefreshLayout?.setOnRefreshListener {
@@ -59,7 +70,6 @@ class HoyFragment : Fragment() {
         }
        buscarDatos()
 
-        //listaMenus.addAll(asList("Modificar mi rutina","Tips de nutrición", "Mis Estadísticas", "Cerrar Sesión"))
 
         adaptador = DietaBlockListAdapter(activity!!,listaDietas)
         recyclerView.apply {
@@ -67,54 +77,86 @@ class HoyFragment : Fragment() {
             adapter = adaptador
         }
 
-        /*
-        val recyclerView:RecyclerView = view.findViewById(R.id.recyclerView)
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-        swipeRefreshLayout?.setOnRefreshListener {
-            buscarMedidas()
+
+        val btnCalendario: ImageView = view.findViewById(R.id.btnCalendario)
+        btnCalendario.setOnClickListener {
+            val newFragment = MainActivity.DatePickerActivityFragment.newInstance(DatePickerDialog.OnDateSetListener { _, year, month, day ->
+                val dia = day.toString().padStart(2, '0')
+                val mes = (month + 1).toString().padStart(2, '0')
+                val selectedDate = dia + " / " + mes + " / " + year
+                val f = year.toString() + "-" + mes + "-" + dia
+                MainActivity.DatePickerActivityFragment.fecha = f
+
+                buscarDatos()
+
+            })
+            newFragment.show(fragmentManager, "datePicker")
         }
-        adaptador = MedidaListAdapter(activity!!,listaMedida)
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = adaptador
-        }/*
 
-
-         */
-         */
-     //   buscarMedidas()
         return view
     }
 
     fun buscarDatos(){
+        recyclerView?.visibility = View.GONE
+        mensajedescanso?.visibility = View.GONE
+
+        val parser = SimpleDateFormat("yyyy-MM-dd")
+        val fecha = parser.parse(MainActivity.DatePickerActivityFragment.fecha)
+
+        val dateFormatSymbols = DateFormatSymbols(Locale.getDefault())
+        dateFormatSymbols.setWeekdays(
+            arrayOf("", "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado"))
+        dateFormatSymbols.setMonths(arrayOf("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+            "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"))
+        val formatter = SimpleDateFormat("EEEE, dd 'de' MMMM", dateFormatSymbols)
+        txtFechaFormat?.text = formatter.format(fecha)
+
+        val parameters = JSONObject()
+        parameters.put("fecha", MainActivity.DatePickerActivityFragment.fecha)
         if(!swipeRefreshLayout!!.isRefreshing) swipeRefreshLayout?.isRefreshing = true
         val request : JsonObjectRequest = object : JsonObjectRequest(
-            Method.POST, VAR.url("persona_dieta_fecha"), null,
+            Method.POST, VAR.url("persona_dieta_fecha"), parameters,
             Response.Listener { response ->
-
                 val success = response.getBoolean("success")
+                val message = response.getString("message")
+
+
                 if(success){
-                    val dietas = response.getJSONArray("dieta")
-                    val horarios = response.getJSONArray("horarios")
-                    val listaDietaHorario = LinkedList<ClsDietaHorario>()
-                    for ( j in 0 until  dietas.length()){
-                        val dieta  = dietas.getJSONObject(j)
-                            listaDietaHorario.add(ClsDietaHorario(dieta.getString("producto"),
-                                dieta.getInt("idhorario"), dieta.getDouble("cantidad"),
-                                dieta.getString("medida"), dieta.getString("fecha")))
+
+                    val info = response.getJSONObject("info")
+                    val asignado = info.getInt("asignado")
+                    if(asignado == 1) {
+                        val dietas = response.getJSONArray("dieta")
+                        val horarios = response.getJSONArray("horarios")
+                        val listaDietaHorario = LinkedList<ClsDietaHorario>()
+                        for (j in 0 until dietas.length()) {
+                            val dieta = dietas.getJSONObject(j)
+                            listaDietaHorario.add(
+                                ClsDietaHorario(
+                                    dieta.getString("producto"),
+                                    dieta.getInt("idhorario"), dieta.getDouble("cantidad"),
+                                    dieta.getString("medida"), dieta.getString("fecha")
+                                )
+                            )
+                        }
+
+                        listaDietas.clear()
+                        for (i in 0 until horarios.length()) {
+                            val horarioStr = horarios.getJSONObject(i)
+                            val idhorario = horarioStr.getInt("id")
+                            val filtro = listaDietaHorario.filter { it.idhorario == idhorario }
+                            val horario = ClsHorario(idhorario, horarioStr.getString("nombre"))
+                            listaDietas.add(ClsDietaBlock(horario, filtro))
+                        }
+                        adaptador?.notifyDataSetChanged()
+                        recyclerView?.visibility = View.VISIBLE
+                    }else{
+                        mensajedescanso?.visibility = View.VISIBLE
+                        mensajedescanso?.text = "Hoy es día libre, puedes comer a tu gusto. Mañana continuamos."
+
                     }
-
-                    listaDietas.clear()
-                    for (i in 0 until horarios.length()) {
-                        val horarioStr = horarios.getJSONObject(i)
-                        val idhorario = horarioStr.getInt("id")
-                        val filtro = listaDietaHorario.filter{ it.idhorario == idhorario}
-                        val horario = ClsHorario(idhorario, horarioStr.getString("nombre"))
-                        listaDietas.add(ClsDietaBlock(horario, filtro))
-                    }
-
-                    adaptador?.notifyDataSetChanged()
-
+                }else{
+                    Toasty.error(activity!!, message, Toast.LENGTH_SHORT, true).show()
                 }
                 swipeRefreshLayout?.isRefreshing = false
 

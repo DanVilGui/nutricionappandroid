@@ -1,14 +1,17 @@
 package com.nutrilife.app
 
+import android.app.DatePickerDialog
+import android.app.Dialog
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.facebook.FacebookSdk
-import com.facebook.appevents.AppEventsLogger
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,10 +25,51 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+
+
+
         val appBarConfiguration = AppBarConfiguration(setOf(
             R.id.navigation_hoy, R.id.navigation_progreso, R.id.navigation_menu))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         navView.setItemIconTintList(null)
+    }
+
+
+    class DatePickerActivityFragment : DialogFragment() {
+
+        var listener: DatePickerDialog.OnDateSetListener? = null
+
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            val arr = fecha.split("-")
+            val year = arr[0].toInt()
+            val month = arr[1].toInt()-1
+            val day = arr[2].toInt()
+            val now = System.currentTimeMillis() - 1000
+
+            val datePickerDialog  = DatePickerDialog(activity!!, listener, year, month, day)
+            datePickerDialog.datePicker.maxDate = now+(1000*60*60*24*7)
+            return datePickerDialog
+
+        }
+
+        companion object {
+            fun fechaHoy(){
+                val c = Calendar.getInstance()
+                val anio = c.get(Calendar.YEAR)
+                val mes = c.get(Calendar.MONTH)
+                val dia = c.get(Calendar.DAY_OF_MONTH)
+                fecha = anio.toString() +"-"+ (mes+1).toString().padStart(2,'0') +"-" + dia
+
+            }
+            var fecha:String = ""
+
+            fun newInstance(listener: DatePickerDialog.OnDateSetListener): DatePickerActivityFragment {
+                val fragment = DatePickerActivityFragment()
+                fragment.listener = listener
+                return fragment
+            }
+        }
+
     }
 }

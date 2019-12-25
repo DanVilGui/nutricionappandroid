@@ -29,9 +29,11 @@ class DietaBlockListAdapter(val act : Context, val list: List<ClsDietaBlock>)
     override fun onBindViewHolder(holder: DietaBlockViewHolder, position: Int) {
         val dieta:ClsDietaBlock = list[position]
         if(dieta.expandido){
+           // holder.nIconMostrar?.setImageResource(R.drawable.arrow_up)
             TransitionManager.beginDelayedTransition(holder.nContenedor!!, AutoTransition() )
             holder.nContenido?.visibility = View.VISIBLE
         }else{
+            holder.nIconMostrar?.setImageResource(R.drawable.arrow_down)
             TransitionManager.beginDelayedTransition(holder.nContenedor!!, AutoTransition() )
             holder.nContenido?.visibility = View.GONE
         }
