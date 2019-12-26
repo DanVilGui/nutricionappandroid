@@ -3,8 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="facebook_app_id">830737484024931</string>
-    <string name="fb_login_protocol_scheme">fb830737484024931</string>
+    <string name="facebook_app_id">2727391237309296</string> <string name="fb_login_protocol_scheme">fb2727391237309296</string>
     <string-array name="ceroAOcho">
         <item>0</item>
         <item>1</item>

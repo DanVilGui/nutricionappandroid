@@ -90,7 +90,7 @@ class HoyFragment : Fragment() {
                 buscarDatos()
 
             })
-            newFragment.show(fragmentManager, "datePicker")
+            newFragment.show(fragmentManager!!, "datePicker")
         }
 
         return view

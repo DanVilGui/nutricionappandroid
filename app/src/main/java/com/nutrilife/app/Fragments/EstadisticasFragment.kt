@@ -34,71 +34,90 @@ import com.nutrilife.app.R
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_menu.*
 import kotlinx.android.synthetic.main.rutina_deportes.*
+import lecho.lib.hellocharts.model.PieChartData
+import lecho.lib.hellocharts.model.SliceValue
+import lecho.lib.hellocharts.util.ChartUtils
+import lecho.lib.hellocharts.view.PieChartView
 import org.json.JSONObject
 import java.util.*
 import java.util.Arrays.asList
 import kotlin.collections.ArrayList
 
-class MenuFragment : Fragment() {
+class EstadisticasFragment : Fragment() {
 
     var sharedPref: SharedPreferences? = null
-    var adaptador :MenuListAdapter ? = null
-    var listaMenus :LinkedList<String> = LinkedList()
     var swipeRefreshLayout:SwipeRefreshLayout? = null
-    var txtNombre:TextView?=null
+    var txtMensaje:TextView? = null
+    var pieChart:PieChartView? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_menu, container, false)
+        val view = inflater.inflate(R.layout.fragment_estadisticas, container, false)
         sharedPref = activity?.getSharedPreferences(
             VAR.PREF_NAME,
             VAR.PRIVATE_MODE
         )
-        txtNombre = view.findViewById(R.id.nombre)
-        val recyclerView:RecyclerView = view.findViewById(R.id.recyclerView)
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-        swipeRefreshLayout?.setOnRefreshListener {
-           buscarDatos()
-        }
-        buscarDatos()
-        listaMenus.clear()
-        listaMenus.addAll(asList("Modificar mi rutina","Tips de nutrición", "Mis Estadísticas", "Cerrar Sesión"))
-        adaptador = MenuListAdapter(activity!!,listaMenus)
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = adaptador
+        val toolbar:Toolbar = view.findViewById(R.id.toolbar)
+        toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
         }
 
+
+        pieChart = view.findViewById(R.id.chart)
+        txtMensaje = view.findViewById(R.id.mensaje)
+
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
+        swipeRefreshLayout?.setOnRefreshListener {
+            buscarEstadisticas()
+        }
+        buscarEstadisticas()
 
         return view
     }
 
-    fun buscarDatos(){
+    fun buscarEstadisticas(){
+
+
         if(!swipeRefreshLayout!!.isRefreshing) swipeRefreshLayout?.isRefreshing = true
         val request : JsonObjectRequest = object : JsonObjectRequest(
-            Method.POST, VAR.url("persona_datos"), null,
+            Method.POST, VAR.url("persona_estadistica"), null,
             Response.Listener { response ->
 
                 val success = response.getBoolean("success")
-                if(success){
-                    val datosPersona = response.getJSONObject("datos")
-                    sharedPref?.edit {
-                        putString(VAR.PREF_DATA_USUARIO, datosPersona.toString())
-                    }
-                    val nombreCompleto :String = datosPersona.getString("nombres")+" "+
-                            datosPersona.getString("apellidos")
-                    txtNombre?.text = nombreCompleto
+                val message = response.getString("message")
 
+                if(success){
+                    val estadistica = response.getJSONObject("estadistica")
+                    val total = estadistica.getInt("total")
+                    val terminado = estadistica.getInt("terminado")
+                    var totalStr = if (total == 1)  " 1 día" else total.toString() + " días"
+                    var terminadoStr = if (terminado == 1)  " 1 día" else terminado.toString() + " días"
+
+                    val texto = "Llevas "+ totalStr + " con nosotros, y has cumplido tu dieta "+
+                            terminadoStr+ "."
+
+                    val values :  LinkedList<SliceValue> =  LinkedList()
+                    values.add(SliceValue(total.toFloat(), ChartUtils.COLOR_ORANGE))
+                    values.add(SliceValue(terminado.toFloat(), ChartUtils.COLOR_GREEN))
+                    val pieChartData = PieChartData(values)
+                    pieChart?.pieChartData = pieChartData
+                    txtMensaje?.text = texto
+
+                }else{
+                    txtMensaje?.text = message
+                    pieChart?.visibility = View.GONE
                 }
                 swipeRefreshLayout?.isRefreshing = false
 
             },
             Response.ErrorListener{
                 try {
+                    txtMensaje?.text = ""
+                    pieChart?.visibility = View.GONE
                     swipeRefreshLayout?.isRefreshing = true
-                    Toasty.error(activity!!, "Error de conexión.", Toast.LENGTH_LONG, true).show()
+                    Toasty.error(activity!!, "Error de conexión.", Toast.LENGTH_SHORT, true).show()
                     Log.e("myerror",  (it.message))
                     val nr = it.networkResponse
                     val r = String(nr.data)

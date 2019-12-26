@@ -55,13 +55,17 @@ class LoginActivity: AppCompatActivity() {
             VAR.PREF_NAME,
             VAR.PRIVATE_MODE
         )
-
+        /*
         val accessToken = AccessToken.getCurrentAccessToken()
         val isLoggedIn = accessToken != null && !accessToken.isExpired()
         if(isLoggedIn){
             mostrarMainActivity()
         }
+         */
 
+        if(sharedPref?.getString(VAR.PREF_DATA_USUARIO, "") != "") {
+            mostrarMainActivity()
+        }
         Toasty.Config.getInstance()
             .allowQueue(false)
             .apply()
@@ -85,7 +89,6 @@ class LoginActivity: AppCompatActivity() {
         data: Intent?
     ) {
 
-        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode === 101) {
             val task: Task<GoogleSignInAccount> =
                 GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -93,9 +96,13 @@ class LoginActivity: AppCompatActivity() {
         }else{
             callbackManager!!.onActivityResult(requestCode, resultCode, data)
         }
+        super.onActivityResult(requestCode, resultCode, data)
+
     }
 
     fun loginFacebook(){
+
+
         LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult?> {
             override fun onSuccess(loginResult: LoginResult?) { // App code
                 val accessToken = AccessToken.getCurrentAccessToken()

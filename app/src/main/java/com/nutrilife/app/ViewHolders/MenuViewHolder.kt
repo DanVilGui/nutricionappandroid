@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -17,9 +18,10 @@ class MenuViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     RecyclerView.ViewHolder(inflater.inflate(R.layout.item_menu, parent, false)) {
 
      var nTitulo:TextView? =null
-
+    var nContenedor:LinearLayout? = null
     init {
         nTitulo = itemView.findViewById(R.id.titulo)
+        nContenedor = itemView.findViewById(R.id.contenedor)
     }
 
     fun bind(act: Context,  menu: String) {

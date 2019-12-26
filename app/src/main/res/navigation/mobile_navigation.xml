@@ -21,5 +21,10 @@
         android:id="@+id/navigation_menu"
         android:name="com.nutrilife.app.Fragments.MenuFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_menu" />
+
+    <fragment
+        android:id="@+id/fragmentEstadisticas"
+        android:name="com.nutrilife.app.Fragments.EstadisticasFragment"
+        />
 </navigation>
