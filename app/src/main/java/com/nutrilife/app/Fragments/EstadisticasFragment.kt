@@ -110,7 +110,6 @@ class EstadisticasFragment : Fragment() {
                     pieChart?.visibility = View.GONE
                 }
                 swipeRefreshLayout?.isRefreshing = false
-
             },
             Response.ErrorListener{
                 try {

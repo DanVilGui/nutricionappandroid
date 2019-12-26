@@ -1,5 +1,6 @@
 package com.nutrilife.app.Clases
 
+import bolts.Bolts
 import java.util.*
 
 data class ClsDietaBlock(
@@ -7,4 +8,5 @@ data class ClsDietaBlock(
     var dietaHorario: List<ClsDietaHorario>
 ){
     var expandido:Boolean = false
+    var pintar:Boolean = false
 }

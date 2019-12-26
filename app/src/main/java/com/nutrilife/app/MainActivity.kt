@@ -53,12 +53,23 @@ class MainActivity : AppCompatActivity() {
         }
 
         companion object {
-            fun fechaHoy(){
+
+            fun formatFecha():String{
                 val c = Calendar.getInstance()
                 val anio = c.get(Calendar.YEAR)
                 val mes = c.get(Calendar.MONTH)
                 val dia = c.get(Calendar.DAY_OF_MONTH)
-                fecha = anio.toString() +"-"+ (mes+1).toString().padStart(2,'0') +"-" + dia
+                return  anio.toString() +"-"+ (mes+1).toString().padStart(2,'0') +"-" + dia
+            }
+            fun formatHora():String{
+                val c = Calendar.getInstance()
+                val hora = c.get(Calendar.HOUR_OF_DAY)
+                val minuto = c.get(Calendar.MINUTE)
+                return  hora.toString().padStart(2,'0')+":"+minuto.toString().padStart(2,'0')
+            }
+
+            fun fechaHoy(){
+                fecha = formatFecha()
             }
             var fecha:String = ""
 
