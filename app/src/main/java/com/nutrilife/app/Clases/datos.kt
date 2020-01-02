@@ -35,7 +35,7 @@ class ClsPersona(val idpersona: Int, val idloginTipo:Int, val nombres:String, va
 class VAR {
     companion object {
 
-        val url: String = "http://192.168.1.110/nutricion/ws/"
+        val url: String = "https://dvilchez.ovh/nutricion/ws/"
         var ext: String = ".php"
 
         fun url(m: String): String {
