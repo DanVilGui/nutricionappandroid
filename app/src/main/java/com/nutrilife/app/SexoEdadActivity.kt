@@ -46,6 +46,7 @@ class SexoEdadActivity: AppCompatActivity() {
             VAR.PREF_NAME,
             VAR.PRIVATE_MODE
         )
+        rbFemenino.isChecked = false
         val datosPersona = sharedPref?.getString(VAR.PREF_DATA_USUARIO, "")
         var fechaNac:String? = null
         if(datosPersona!="") {
@@ -53,9 +54,10 @@ class SexoEdadActivity: AppCompatActivity() {
             if(!data.isNull("fecha_nacimiento")){
                 fechaNac = data.getString("fecha_nacimiento")
             }
+
             val sexo = data.getString("sexo")
             if(sexo == "M") rbMasculino.isChecked = true
-            else rbFemenino.isChecked = true
+            if(sexo == "F") rbFemenino.isChecked = true
         }
 
         if(fechaNac==null){
@@ -86,25 +88,34 @@ class SexoEdadActivity: AppCompatActivity() {
         }
 
         btnCalendario.setOnClickListener {
-            val newFragment = DatePickerFragment.newInstance(DatePickerDialog.OnDateSetListener { _, year, month, day ->
-                val dia =  day.toString().padStart(2, '0')
-                val mes = (month + 1).toString().padStart(2,'0')
-                val selectedDate = dia+ " / " + mes + " / " + year
-                DatePickerFragment.fecha = year.toString() +"-"+ mes +"-" + dia
-                try {
-                    txtFechaNacimiento.setError(null)
-                }catch (ex:Exception){
+            if (SystemClock.elapsedRealtime() - lastClick >= 1000){
+                val newFragment = DatePickerFragment.newInstance(DatePickerDialog.OnDateSetListener { _, year, month, day ->
+                    val dia =  day.toString().padStart(2, '0')
+                    val mes = (month + 1).toString().padStart(2,'0')
+                    val selectedDate = dia+ " / " + mes + " / " + year
+                    DatePickerFragment.fecha = year.toString() +"-"+ mes +"-" + dia
+                    try {
+                        txtFechaNacimiento.setError(null)
+                    }catch (ex:Exception){
 
-                }
-                txtFechaNacimiento.setText(selectedDate)
-            })
-            newFragment.show(supportFragmentManager, "datePicker")
+                    }
+                    txtFechaNacimiento.setText(selectedDate)
+                })
+                newFragment.show(supportFragmentManager, "datePicker")
+            }
+            lastClick = SystemClock.elapsedRealtime()
         }
 
         btnContinuar.setOnClickListener{
             if (SystemClock.elapsedRealtime() - lastClick >= 1000){
-                val sexo = if (rbFemenino.isChecked) "F" else   "M"
-                registrarSexoEdad( sexo, DatePickerFragment.fecha )
+                if(!rbFemenino.isChecked && !rbMasculino.isChecked){
+                    Toasty.warning(applicationContext, "Seleccione su sexo", Toast.LENGTH_SHORT, true).show()
+                }else if(txtFechaNacimiento.text.isEmpty()){
+                    Toasty.warning(applicationContext, "Seleccione su fecha de nacimiento", Toast.LENGTH_SHORT, true).show()
+                }else{
+                    val sexo = if (rbFemenino.isChecked) "F" else   "M"
+                    registrarSexoEdad( sexo, DatePickerFragment.fecha )
+                }
             }
             lastClick = SystemClock.elapsedRealtime()
         }

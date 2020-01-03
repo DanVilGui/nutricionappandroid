@@ -44,7 +44,7 @@ class PreferenciasActivity: AppCompatActivity() {
 
        requestQueue =  Volley.newRequestQueue(this)
 
-        val datasetComidas: LinkedList<String> = LinkedList(asList("0", "1","2","3", "4","5","6","7","8"))
+        val datasetComidas: LinkedList<String> = LinkedList(asList("1","2","3", "4","5","6","7","8"))
 
         val dataSetVasos: LinkedList<String> = LinkedList()
         val j:Int =1
@@ -62,24 +62,26 @@ class PreferenciasActivity: AppCompatActivity() {
 
 
         btnContinuar.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - lastClick >= 1000){
+            if (SystemClock.elapsedRealtime() - lastClick >= 1000) {
                 val indexComidas: Int =
                     groupComidas.indexOfChild(findViewById(groupComidas.getCheckedRadioButtonId()))
                 val indexDieta: Int =
                     groupDieta.indexOfChild(findViewById(groupDieta.getCheckedRadioButtonId()))
-                val hizoDieta = if (indexDieta == R.id.si) 1 else 0
-                val parametros = JSONObject()
-                parametros.put("cant_comidas", spComida.selectedItem.toString().toInt())
-                parametros.put("cant_vasos", spVasos.selectedItem.toString().toInt())
-                parametros.put("comida_hambre", indexComidas +1)
-                parametros.put("hace_dieta", hizoDieta)
-                if(PROCESAR_AGREGAR){
-                    /*
-                    val builder = AlertDialog.Builder(this)
-                    builder.setView(R.layout.loading_dialog)
-                    loadingDialog = builder.create()
-                     */
-                    actualizarPreferencia(parametros)
+
+                if(indexComidas==-1){
+                    Toasty.warning(applicationContext, "Seleccione que prefiere comer durante el día", Toast.LENGTH_SHORT, true).show()
+                }else if(indexDieta == -1){
+                    Toasty.warning(applicationContext, "Sigue actualmente alguna dieta?", Toast.LENGTH_SHORT, true).show()
+                }else{
+                    val hizoDieta = if (indexDieta == 0) 1 else 0
+                    val parametros = JSONObject()
+                    parametros.put("cant_comidas", spComida.selectedItem.toString().toInt())
+                    parametros.put("cant_vasos", spVasos.selectedItem.toString().toInt())
+                    parametros.put("comida_hambre", indexComidas +1)
+                    parametros.put("hace_dieta", hizoDieta)
+                    if(PROCESAR_AGREGAR){
+                        actualizarPreferencia(parametros)
+                    }
                 }
             }
             lastClick = SystemClock.elapsedRealtime()

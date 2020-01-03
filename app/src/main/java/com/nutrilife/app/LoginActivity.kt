@@ -2,11 +2,13 @@ package com.nutrilife.app
 
 import `in`.championswimmer.libsocialbuttons.BtnSocial
 import android.R.attr
+import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import com.android.volley.Request
@@ -32,7 +34,7 @@ import java.util.*
 
 
 class LoginActivity: AppCompatActivity() {
-
+    var loadingDialog: Dialog? = null
     var sharedPref: SharedPreferences? = null
     var callbackManager: CallbackManager? = null
     var mGoogleSignInClient:GoogleSignInClient? = null
@@ -62,7 +64,7 @@ class LoginActivity: AppCompatActivity() {
             mostrarMainActivity()
         }
          */
-
+        loginFacebook()
         if(sharedPref?.getString(VAR.PREF_DATA_USUARIO, "") != "") {
             mostrarMainActivity()
         }
@@ -70,7 +72,6 @@ class LoginActivity: AppCompatActivity() {
             .allowQueue(false)
             .apply()
 
-        loginFacebook()
         val btnLoginFacebook: BtnSocial = findViewById(R.id.btnLoginFacebook)
         btnLoginFacebook.setOnClickListener {
             LoginManager.getInstance()
@@ -100,11 +101,19 @@ class LoginActivity: AppCompatActivity() {
 
     }
 
+    fun mostrarEspereDialog(){
+        val builder = AlertDialog.Builder(this)
+        builder.setView(R.layout.loading_dialog)
+        loadingDialog = builder.create()
+        loadingDialog?.setCancelable(false)
+        loadingDialog?.setCanceledOnTouchOutside(false)
+        loadingDialog?.show()
+    }
+
     fun loginFacebook(){
-
-
         LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult?> {
             override fun onSuccess(loginResult: LoginResult?) { // App code
+                mostrarEspereDialog()
                 val accessToken = AccessToken.getCurrentAccessToken()
                 val request =
                     GraphRequest.newMeRequest(
@@ -130,7 +139,9 @@ class LoginActivity: AppCompatActivity() {
 
                         } catch (e: JSONException) {
                             e.printStackTrace()
+                            loadingDialog?.dismiss()
                         }
+
                     }
 
                 val parameters = Bundle()
@@ -140,9 +151,12 @@ class LoginActivity: AppCompatActivity() {
             }
 
             override fun onCancel() { // App code
+                loadingDialog?.dismiss()
             }
 
             override fun onError(exception: FacebookException) { // App code
+                Toasty.error(applicationContext, "Error de autenticación con Facebook.", Toast.LENGTH_SHORT, true).show()
+                loadingDialog?.dismiss()
             }
         })
     }
@@ -150,6 +164,7 @@ class LoginActivity: AppCompatActivity() {
     fun loginGoogle(completedTask:Task<GoogleSignInAccount>){
 
         try {
+            mostrarEspereDialog()
             val account = completedTask.getResult(ApiException::class.java)
 
                 val nombres = account?.givenName
@@ -167,7 +182,8 @@ class LoginActivity: AppCompatActivity() {
             val persona = ClsPersona(-1,idtipo,nombres!!, apellidos!!, correo!!)
             registrarPersonaServicio(persona)
         } catch ( e:Exception) {
-
+            loadingDialog?.dismiss()
+            Toasty.error(applicationContext, "Error de autenticación con Google.", Toast.LENGTH_SHORT, true).show()
             Log.e("myerror", "signInResult:failed code=" + e.message)
         }
 
@@ -242,11 +258,12 @@ class LoginActivity: AppCompatActivity() {
                     }else{
                         Toasty.warning(applicationContext, message, Toast.LENGTH_LONG, true).show()
                     }
-
+                    loadingDialog?.dismiss()
                 },
                 Response.ErrorListener{
                     try {
                         Toasty.error(applicationContext, "Error de conexión.", Toast.LENGTH_LONG, true).show()
+                        loadingDialog?.dismiss()
                         Log.e("myerror",  (it.message))
                         val nr = it.networkResponse
                         val r = String(nr.data)
