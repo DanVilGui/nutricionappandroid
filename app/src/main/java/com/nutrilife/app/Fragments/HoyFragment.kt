@@ -3,6 +3,7 @@ package com.nutrilife.app.Fragments
 import android.app.DatePickerDialog
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +27,7 @@ import org.json.JSONObject
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.concurrent.schedule
 
 class HoyFragment : Fragment() {
     var contenedorDietas:LinearLayout? = null
@@ -87,6 +89,7 @@ class HoyFragment : Fragment() {
         btnTerminar?.setOnClickListener {
             terminarDia()
         }
+        actualizarDiaActual()
         return view
     }
 
@@ -182,8 +185,27 @@ class HoyFragment : Fragment() {
         val requestQueue = Volley.newRequestQueue(activity!!)
         requestQueue.add(request)
     }
-    fun terminarDia(){
 
+    fun actualizarDiaActual(){
+        val handler = Handler()
+        handler.postDelayed({
+            var actualizar = true
+            if (MainActivity.DatePickerActivityFragment.formatFecha() == MainActivity.DatePickerActivityFragment.fecha) {
+                if(recyclerView?.visibility == View.VISIBLE) {
+                    try {
+                        buscarDatos()
+                    }catch (ex:java.lang.Exception){
+                        actualizar = false
+                    }
+                }
+            }
+            if (actualizar){
+                actualizarDiaActual()
+            }
+        }, 1000*60*1)
+    }
+
+    fun terminarDia(){
         swipeRefreshLayout?.isRefreshing = true
         mostrarTerminarDia(false)
         val request : JsonObjectRequest = object : JsonObjectRequest(

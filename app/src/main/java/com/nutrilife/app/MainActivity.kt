@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -15,10 +16,13 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.nutrilife.app.Clases.VAR
 import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +36,8 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         navView.setItemIconTintList(null)
-    }
 
+    }
 
     class DatePickerActivityFragment : DialogFragment() {
 
@@ -45,7 +49,6 @@ class MainActivity : AppCompatActivity() {
             val month = arr[1].toInt()-1
             val day = arr[2].toInt()
             val now = System.currentTimeMillis() - 1000
-
             val datePickerDialog  = DatePickerDialog(activity!!, listener, year, month, day)
             datePickerDialog.datePicker.maxDate = now+(1000*60*60*24*7)
             return datePickerDialog

@@ -37,7 +37,7 @@ class VAR {
 
         val url: String = "https://dvilchez.ovh/nutricion/ws/"
         var ext: String = ".php"
-
+        var ACTION_ACTUALIZAR_DIETA = 1
         fun url(m: String): String {
             return url +  m + ext
         }

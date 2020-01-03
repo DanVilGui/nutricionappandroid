@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -52,6 +53,8 @@ class MenuFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_menu, container, false)
+        Handler().removeCallbacksAndMessages(null)
+
         sharedPref = activity?.getSharedPreferences(
             VAR.PREF_NAME,
             VAR.PRIVATE_MODE

@@ -1,7 +1,5 @@
 package com.nutrilife.app.Clases
 
-import java.util.*
-
 
 data class ClsHorario(
     var idhorario:Int ,
@@ -15,9 +13,8 @@ data class ClsHorario(
             val min = a[1].toInt()
             return hora*60 + min
         }
-        var tolerancia = 15*60 // 30 minutos
+        var tolerancia = 30*60 // 30 minutos
         val horariosRango: Array<String> = arrayOf( "06:00", "10:00", "13:30", "17:00", "21:00")
-
     }
 }
 
