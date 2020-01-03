@@ -37,7 +37,7 @@
                         android:foregroundGravity="right"
 
                         android:src="@drawable/boton_calendario"
-                        android:layout_width="45dp"
+                        android:layout_width="50dp"
                         android:layout_height="35dp">
                     </ImageView>
                 </LinearLayout>

@@ -4,25 +4,21 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
-import android.util.Log
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.edit
-import androidx.fragment.app.commit
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.nutrilife.app.Clases.VAR
-import com.nutrilife.app.EvaluacionActivity
-import com.nutrilife.app.Fragments.EstadisticasFragment
 import com.nutrilife.app.LoginActivity
 import com.nutrilife.app.R
 import com.nutrilife.app.ViewHolders.MenuViewHolder
 import es.dmoral.toasty.Toasty
-import kotlinx.android.synthetic.main.item_menu.view.*
+
 
 class MenuListAdapter(val act : Context, val list: List<String>)
     : RecyclerView.Adapter<MenuViewHolder>() {
@@ -42,26 +38,26 @@ class MenuListAdapter(val act : Context, val list: List<String>)
 
                 }
                 1->{
+                    val url = VAR.url + "tips.pdf"
+                    activity.startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(url)
+                        )
+                    )
 
                 }
                 2->{
                     //Mis Estadisticas
-                    Log.e("myerror", "click contenedor menuw " + position.toString())
                     val navHostFragment:NavHostFragment =
                         activity.supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
                     navHostFragment.navController.navigate(R.id.fragmentEstadisticas)
-                    /*
-                    activity.supportFragmentManager.commit {
-                        replace( R.id.nav_host_fragment,    EstadisticasFragment())
-                    }
-                     */
                 }
                 3->{
 
                     val builder = AlertDialog.Builder(activity)
                     builder.setTitle("Salir")
                     builder.setMessage("Está seguro que desea cerrar sesión?")
-
                     val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
                         when(which){
                             DialogInterface.BUTTON_POSITIVE ->{

@@ -27,4 +27,5 @@
         android:id="@+id/fragmentEstadisticas"
         android:name="com.nutrilife.app.Fragments.EstadisticasFragment"
         />
+
 </navigation>
