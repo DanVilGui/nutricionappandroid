@@ -122,7 +122,7 @@ class EvaluacionActivity: AppCompatActivity() {
                 return params
             }
         }
-        val socketTimeout = 15000
+        val socketTimeout = 2*60*1000
 
         val policy: RetryPolicy = DefaultRetryPolicy(
             socketTimeout,
