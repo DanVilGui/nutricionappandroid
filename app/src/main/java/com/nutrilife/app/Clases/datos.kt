@@ -48,6 +48,8 @@ class VAR {
         val PREF_TOKEN  = "token"
         val PREF_DATA_USUARIO  = "datausuario"
         val PREF_TEMP_RUTINA= "rutina_temporal"
+        val PREF_CAMBIARRUTINA = "cambiar_rutina"
+        val PREF_CAMBIARPREFERENCIA = "cambiar_preferencia"
     }
 }
 

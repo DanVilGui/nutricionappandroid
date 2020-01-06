@@ -58,9 +58,28 @@ class RutinasDeporteActivity: AppCompatActivity() {
         listaDeportes.add(ClsDeporte("tenis", "TENIS", dataset, 0))
         listaDeportes.add(ClsDeporte("correr", "CORRER", dataset, 0))
 
+        val adaptador =  DeporteListAdapter(applicationContext,listaDeportes)
         recyclerView?.apply {
             layoutManager = LinearLayoutManager(applicationContext)
-            adapter = DeporteListAdapter(applicationContext,listaDeportes)
+            adapter = adaptador
+        }
+
+        /*
+          Cargar Rutina anterior
+        */
+        val datosPersona = sharedPref?.getString(VAR.PREF_DATA_USUARIO, "")
+        if(datosPersona!= ""){
+            val data = JSONObject(datosPersona)
+            if( !data.isNull("rutina") ){
+                val rutina = data.getJSONObject("rutina")
+                listaDeportes.forEach {
+                    val deporte = rutina.optInt(it.tipo, 0)
+                    if(deporte!=0){
+                        it.horas = deporte
+                    }
+                }
+            }
+            adaptador.notifyDataSetChanged()
         }
 
         val btnContinuar:Button = findViewById(R.id.btnContinuar)
@@ -81,8 +100,6 @@ class RutinasDeporteActivity: AppCompatActivity() {
             lastClick = SystemClock.elapsedRealtime()
 
         }
-
-
 
 
     }

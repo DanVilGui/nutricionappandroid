@@ -3,8 +3,10 @@ package com.nutrilife.app
 import `in`.championswimmer.libsocialbuttons.BtnSocial
 import android.R.attr
 import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -189,53 +191,101 @@ class LoginActivity: AppCompatActivity() {
 
     }
 
+    fun actualizarRutina(){
+
+        val datosPersona = sharedPref?.getString(VAR.PREF_DATA_USUARIO, "")
+        if(datosPersona!= ""){
+            val data = JSONObject(datosPersona)
+            if( !data.isNull("rutina") ){
+                val rutina = data.getJSONObject("rutina")
+                val recalcular =  rutina.getInt("recalcular")
+                if(recalcular == 1){
+                    abrirActivity(PreferenciasActivity::class.java)
+                    return
+                }
+            }
+        }
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("")
+        builder.setMessage("Continuar con la modificación de su rutina?")
+        val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
+            when(which){
+                DialogInterface.BUTTON_POSITIVE ->{
+                    abrirActivity(RutinasConocerActivity::class.java)
+                }
+                Dialog.BUTTON_NEGATIVE->{
+                    sharedPref?.edit {
+                        putString(VAR.PREF_CAMBIARRUTINA, "")
+                    }
+                    mostrarMainActivity()
+                }
+            }
+        }
+        builder.setPositiveButton("SI",dialogClickListener)
+        builder.setNegativeButton("NO",dialogClickListener)
+        val dialog = builder.create()
+        dialog.show()
+    }
+
     fun mostrarMainActivity(){
+        val cambiarRutina = sharedPref?.getString(VAR.PREF_CAMBIARRUTINA, "")
+        if(cambiarRutina!= ""){
+           // Log.e("myerror", "cambiarrutina "+ cambiarRutina)
+            actualizarRutina()
+            return
+        }
+
         val datosPersona = sharedPref?.getString(VAR.PREF_DATA_USUARIO, "")
         if(datosPersona!=""){
-            val data = JSONObject(datosPersona)
-            Log.e("myerror", data.toString())
-            if( data.isNull("fecha_nacimiento") ){
-                val intent = Intent(applicationContext, SexoEdadActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-                finish()
-            }
-            else if( data.isNull("medidas") ){
-                val intent = Intent(applicationContext, ActualizarMedidasActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-                finish()
-            }else if( data.isNull("rutina") ){
-                val intent = Intent(applicationContext, RutinasConocerActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-                finish()
-            }else if( data.isNull("preferencia") ){
-                val intent = Intent(applicationContext, PreferenciasActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-                finish()
-            }
-            else{
-                val rutina = data.getJSONObject("rutina")
-                if(rutina.getString("recalcular").toInt() == 1){
-                    val intent = Intent(applicationContext, EvaluacionActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
-                    finish()
-                }else{
-                    val intent = Intent(applicationContext, MainActivity::class.java)
+                val data = JSONObject(datosPersona)
+                Log.e("myerror", data.toString())
+                if( data.isNull("fecha_nacimiento") ){
+                    val intent = Intent(applicationContext, SexoEdadActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                     finish()
                 }
+                else if( data.isNull("medidas") ){
+                    val intent = Intent(applicationContext, ActualizarMedidasActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    finish()
+                }else if( data.isNull("rutina") ){
+                    val intent = Intent(applicationContext, RutinasConocerActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    finish()
+                }else if( data.isNull("preferencia") ){
+                    val intent = Intent(applicationContext, PreferenciasActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    finish()
+                }
+                else{
+                    val rutina = data.getJSONObject("rutina")
+                    if(rutina.getString("recalcular").toInt() == 1){
+                        val intent = Intent(applicationContext, EvaluacionActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+                        finish()
+                    }else{
+                        val intent = Intent(applicationContext, MainActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+                        finish()
+                    }
 
+                }
             }
-        }
-
 
     }
 
+    fun abrirActivity(cls: Class<*>){
+        val intent = Intent(applicationContext,cls )
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
+    }
 
     fun registrarPersonaServicio(persona:ClsPersona){
 

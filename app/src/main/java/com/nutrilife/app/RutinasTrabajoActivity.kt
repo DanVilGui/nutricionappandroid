@@ -88,6 +88,46 @@ class RutinasTrabajoActivity: AppCompatActivity() {
 
             }
         }
+        /*
+            Cargar Rutina anterior
+         */
+        val datosPersona = sharedPref?.getString(VAR.PREF_DATA_USUARIO, "")
+        if(datosPersona!= ""){
+            val data = JSONObject(datosPersona)
+            if( !data.isNull("rutina") ){
+
+                val rutina = data.getJSONObject("rutina")
+                val trabajo_ligero =  rutina.getInt("trabaja_ligero")
+                val trabajo_casa =  rutina.getInt("trabaja_casa")
+                val trabajo_activo =  rutina.getInt("trabaja_activo")
+                val trabajo_muyactivo =  rutina.getInt("trabaja_muyactivo")
+
+                when (true){
+                    trabajo_ligero!=0-> {
+                        listaRadioButtons!![0].performClick()
+
+                        txtLigero?.selectedIndex = dataset.indexOf(trabajo_ligero.toString())
+                    }
+                    trabajo_casa!=0-> {
+                        listaRadioButtons!![1].performClick()
+                        txtCasa?.selectedIndex = dataset.indexOf(trabajo_casa.toString())
+                    }
+                    trabajo_activo!=0-> {
+                        listaRadioButtons!![2].performClick()
+                        txtActivo?.selectedIndex = dataset.indexOf(trabajo_activo.toString())
+                    }
+                    trabajo_muyactivo!=0-> {
+                        listaRadioButtons!![3].performClick()
+                        txtMuyActivo?.selectedIndex = dataset.indexOf(trabajo_muyactivo.toString())
+                    }
+                    else->{
+                        listaRadioButtons!![4].performClick()
+
+                    }
+
+                }
+            }
+        }
 
 
         val btnContinuar:Button = findViewById(R.id.btnContinuar)

@@ -7,11 +7,13 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import android.widget.Button
+import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import androidx.core.view.forEachIndexed
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -46,6 +48,9 @@ class PreferenciasActivity: AppCompatActivity() {
 
         val datasetComidas: LinkedList<String> = LinkedList(asList("1","2","3", "4","5","6","7","8"))
 
+        val datasetHambre: LinkedList<String> = LinkedList(asList("FRUTA","COMIDA RAPIDA","GOLOSINAS",
+            "CEREALES","NINGUNA"))
+
         val dataSetVasos: LinkedList<String> = LinkedList()
         val j:Int =1
         for(i in 1 until 21){
@@ -60,9 +65,32 @@ class PreferenciasActivity: AppCompatActivity() {
         val groupDieta :RadioGroup = findViewById(R.id.rgDieta)
         val btnContinuar:Button = findViewById(R.id.btnContinuar)
 
+        val datosPersona = sharedPref?.getString(VAR.PREF_DATA_USUARIO, "")
+        if(datosPersona!= ""){
+            val data = JSONObject(datosPersona)
+            if( !data.isNull("preferencia") ){
+                val preferencia = data.getJSONObject("preferencia")
+                val cant_comidas = preferencia.getInt("cant_comidas")
+                val cant_vasos = preferencia.getInt("cant_vasos")
+                val comida_hambre = preferencia.getString("comida_hambre")
+                var index_hambre = datasetHambre.indexOf(comida_hambre)
+                var index_comida = datasetComidas.indexOf(cant_comidas.toString())
+                if(index_comida == -1) index_comida  = 0
+                if(index_hambre == -1) index_hambre = 4
+
+                val hace_dieta = preferencia.getInt("hace_dieta")
+                spComida.selectedIndex = index_comida
+                spVasos.selectedIndex = dataSetVasos.indexOf(cant_vasos.toString())
+                ( groupComidas.getChildAt(index_hambre) as RadioButton).isChecked = true
+                val index_dieta = if(hace_dieta == 1 ) 0 else 1
+                ( groupDieta.getChildAt(index_dieta) as RadioButton).isChecked = true
+
+            }
+        }
 
         btnContinuar.setOnClickListener {
             if (SystemClock.elapsedRealtime() - lastClick >= 1000) {
+
                 val indexComidas: Int =
                     groupComidas.indexOfChild(findViewById(groupComidas.getCheckedRadioButtonId()))
                 val indexDieta: Int =

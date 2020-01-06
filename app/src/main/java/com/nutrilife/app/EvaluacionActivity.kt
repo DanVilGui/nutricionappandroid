@@ -91,6 +91,7 @@ class EvaluacionActivity: AppCompatActivity() {
                             data.put("rutina", rutina)
                             sharedPref?.edit {
                                 putString(VAR.PREF_DATA_USUARIO, data.toString())
+                                putString(VAR.PREF_CAMBIARRUTINA, "")
                             }
                             PROCESAR_AGREGAR = true
                         }

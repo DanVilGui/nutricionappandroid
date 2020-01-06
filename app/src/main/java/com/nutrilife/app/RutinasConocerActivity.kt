@@ -31,20 +31,24 @@ class RutinasConocerActivity: AppCompatActivity() {
         this.supportActionBar?.hide()
         val dataset: List<String> = LinkedList(asList("0", "1","2","3", "4","5","6","7","8"))
 
-       /* txtCaminar = findViewById(R.id.sp_caminar)
-
-        val adapter: ArrayAdapter<*> =
-            ArrayAdapter<String>(this, R.layout.spinner_item_hora, R.id.texto, dataset)
-        txtCaminar?.adapter = adapter
-        */
-
         txtCaminar = findViewById(R.id.sp_caminar)
         txtCaminar?.attachDataSource(dataset)
 
         txtEscaleras = findViewById(R.id.sp_escaleras)
         txtEscaleras?.attachDataSource(dataset)
 
+        val datosPersona = sharedPref?.getString(VAR.PREF_DATA_USUARIO, "")
+        if(datosPersona!= ""){
+            val data = JSONObject(datosPersona)
+            if( !data.isNull("rutina") ){
 
+                val rutina = data.getJSONObject("rutina")
+                val caminar =  rutina.getInt("caminar")
+                val escaleras = rutina.getInt("escaleras")
+                txtCaminar?.selectedIndex = dataset.indexOf( caminar.toString())
+                txtEscaleras?.selectedIndex = dataset.indexOf( escaleras.toString())
+            }
+        }
 
 
         val btnContinuar:Button = findViewById(R.id.btnContinuar)

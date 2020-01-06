@@ -62,8 +62,9 @@ class MainActivity : AppCompatActivity() {
                 val anio = c.get(Calendar.YEAR)
                 val mes = c.get(Calendar.MONTH)
                 val dia = c.get(Calendar.DAY_OF_MONTH)
-                return  anio.toString() +"-"+ (mes+1).toString().padStart(2,'0') +"-" + dia
+                return  anio.toString() +"-"+ (mes+1).toString().padStart(2,'0') +"-" + dia.toString().padStart(2, '0')
             }
+
             fun formatHora():String{
                 val c = Calendar.getInstance()
                 val hora = c.get(Calendar.HOUR_OF_DAY)
@@ -83,5 +84,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun onDestroy() {
+        Handler().removeCallbacksAndMessages(null)
+        super.onDestroy()
     }
 }

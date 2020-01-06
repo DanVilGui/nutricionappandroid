@@ -80,7 +80,6 @@ class HoyFragment : Fragment() {
                 val f = year.toString() + "-" + mes + "-" + dia
                 MainActivity.DatePickerActivityFragment.fecha = f
                 buscarDatos()
-
             })
             newFragment.show(fragmentManager!!, "datePicker")
         }
@@ -244,6 +243,9 @@ class HoyFragment : Fragment() {
 
     fun pintarHorario():Int{
         val horariosRango = ClsHorario.horariosRango
+        Log.e("myerror", MainActivity.DatePickerActivityFragment.fecha)
+        Log.e("myerror", MainActivity.DatePickerActivityFragment.formatFecha())
+
         if(MainActivity.DatePickerActivityFragment.formatFecha() == MainActivity.DatePickerActivityFragment.fecha){
             val hora = MainActivity.DatePickerActivityFragment.formatHora()
             val minsActual = ClsHorario.indicadorHora(hora)
