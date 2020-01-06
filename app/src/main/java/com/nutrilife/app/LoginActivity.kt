@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -76,8 +77,9 @@ class LoginActivity: AppCompatActivity() {
 
         val btnLoginFacebook: BtnSocial = findViewById(R.id.btnLoginFacebook)
         btnLoginFacebook.setOnClickListener {
+
             LoginManager.getInstance()
-                .logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
+                .logInWithReadPermissions(this, Arrays.asList( "public_profile","email"));
         }
         val btnLoginGoogle:BtnSocial = findViewById(R.id.btnLoginGoogle)
         btnLoginGoogle.setOnClickListener {

@@ -61,7 +61,7 @@ class ActualizarMedidasActivity: AppCompatActivity() {
                     b.putDouble("medida",txtTamanio?.text.toString().toDouble())
                     b.putInt("cintura",txtCintura?.text.toString().toInt())
                     b.putInt("cadera",txtCadera?.text.toString().toInt())
-                    b.putBoolean("control", true)
+                    b.putBoolean("control", control)
                     intent.putExtras(b)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)

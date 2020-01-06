@@ -57,7 +57,6 @@ class IMCActivity: AppCompatActivity() {
             cintura = b.getInt("cintura")
             cadera = b.getInt("cadera")
             control = b.getBoolean("control", false)
-
             preguntar_actualizar_ruta = b.getBoolean("preguntar", false)
             val imc = ClsIMC(peso, medida)
             imc.calcular()
