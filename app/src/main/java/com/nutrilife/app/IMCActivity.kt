@@ -1,5 +1,6 @@
 package com.nutrilife.app
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import com.android.volley.Response
@@ -36,7 +38,7 @@ class IMCActivity: AppCompatActivity() {
     var preguntar_actualizar_ruta = false
     var PROCESAR_AGREGAR = true
     var lastClick: Long = 0
-
+    var control = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.imc)
@@ -47,12 +49,15 @@ class IMCActivity: AppCompatActivity() {
         )
         val lblIMC:TextView = findViewById(R.id.imc)
         val lblIMCTipo:TextView = findViewById(R.id.imcTipo)
+
         val b = intent.extras
         if(b!=null){
             peso = b.getDouble("peso")
             medida = b.getDouble("medida")
             cintura = b.getInt("cintura")
             cadera = b.getInt("cadera")
+            control = b.getBoolean("control", false)
+
             preguntar_actualizar_ruta = b.getBoolean("preguntar", false)
             val imc = ClsIMC(peso, medida)
             imc.calcular()
@@ -133,6 +138,31 @@ class IMCActivity: AppCompatActivity() {
     }
 
     fun mostrarActualizarRutina(){
+        if(control){
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Modificar Rutina")
+            builder.setMessage("Está seguro que desea modificar su rutina?")
+            val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
+                when(which){
+                    DialogInterface.BUTTON_POSITIVE ->{
+
+                        sharedPref?.edit {
+                            putString(VAR.PREF_CAMBIARRUTINA, "1")
+                        }
+                        val intent = Intent(this, RutinasConocerActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+                        finish()
+                    }
+                }
+            }
+            builder.setPositiveButton("SI",dialogClickListener)
+            builder.setNegativeButton("NO",dialogClickListener)
+            val dialog = builder.create()
+            dialog.show()
+            return
+        }
+
         val datosPersona = sharedPref?.getString(VAR.PREF_DATA_USUARIO, "")
         if(datosPersona!=""){
             val data = JSONObject(datosPersona)

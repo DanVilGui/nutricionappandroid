@@ -2,14 +2,11 @@ package com.nutrilife.app
 
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
-import android.view.Window
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -17,11 +14,15 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.nutrilife.app.Clases.VAR
+import org.json.JSONObject
+import java.lang.Exception
+import java.text.SimpleDateFormat
 import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
 
+    var sharedPref: SharedPreferences? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +30,32 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
 
+        sharedPref = getSharedPreferences(
+            VAR.PREF_NAME,
+            VAR.PRIVATE_MODE
+        )
+
+        val datosPersona = sharedPref?.getString(VAR.PREF_DATA_USUARIO, "")
+        if(datosPersona!=""){
+            val datos = JSONObject(datosPersona)
+            if(!datos.isNull("ultimadieta")){
+                try {
+                    val ultimadieta = datos.getString("ultimadieta")
+                    val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+                    val fechaActual = dateFormat.parse(DatePickerActivityFragment.formatFecha())
+                    val fechaDieta = dateFormat.parse(ultimadieta)
+                    if (fechaDieta.before(fechaActual)){
+                        val intent = Intent(this, ActualizarMedidasActivity::class.java)
+                        intent.putExtra("control", true)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+                        finish()
+                    }
+                }catch (ex:Exception){
+
+                }
+            }
+        }
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
         val appBarConfiguration = AppBarConfiguration(setOf(

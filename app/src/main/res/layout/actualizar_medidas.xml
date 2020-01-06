@@ -9,6 +9,7 @@
     >
 
     <TextView
+        android:id="@+id/txtTitulo"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_width="wrap_content"

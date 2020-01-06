@@ -66,6 +66,5 @@ class RutinasConocerActivity: AppCompatActivity() {
 
             lastClick = SystemClock.elapsedRealtime()
         }
-
     }
 }

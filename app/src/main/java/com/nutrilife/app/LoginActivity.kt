@@ -68,7 +68,7 @@ class LoginActivity: AppCompatActivity() {
          */
         loginFacebook()
         if(sharedPref?.getString(VAR.PREF_DATA_USUARIO, "") != "") {
-            mostrarMainActivity()
+            actualizarDatos()
         }
         Toasty.Config.getInstance()
             .allowQueue(false)
@@ -190,6 +190,52 @@ class LoginActivity: AppCompatActivity() {
         }
 
     }
+    
+    fun actualizarDatos(){
+        mostrarEspereDialog()
+        val request : JsonObjectRequest = object : JsonObjectRequest(
+            Method.POST, VAR.url("persona_datos"), null,
+            Response.Listener { response ->
+
+                val success = response.getBoolean("success")
+                val message = response.getString("message")
+                if(success){
+                    val datosPersona = response.getJSONObject("datos")
+                    sharedPref?.edit {
+                        putString(VAR.PREF_TOKEN, datosPersona.getString("token"))
+                        putString(VAR.PREF_DATA_USUARIO, datosPersona.toString())
+
+                    }
+                    Toasty.success(applicationContext, "Bienvenido!", Toast.LENGTH_SHORT, true).show()
+                    mostrarMainActivity()
+                }else{
+                    Toasty.warning(applicationContext, message, Toast.LENGTH_SHORT, true).show()
+                }
+                loadingDialog?.dismiss()
+            },
+            Response.ErrorListener{
+                try {
+                    Toasty.error(applicationContext, "Error de conexión.", Toast.LENGTH_SHORT, true).show()
+                    loadingDialog?.dismiss()
+                    Log.e("myerror",  (it.message))
+                    val nr = it.networkResponse
+                    val r = String(nr.data)
+                }catch (ex:Exception){
+                    Log.e("myerror", ex.message.toString())
+
+                }
+            }) {
+            override fun getHeaders(): Map<String, String> {
+                var params: MutableMap<String, String> = HashMap()
+                params["TOKEN"] =  sharedPref?.getString("token", "")!!
+                return params
+            }
+        }
+
+
+        val requestQueue = Volley.newRequestQueue(this)
+        requestQueue.add(request)
+    }
 
     fun actualizarRutina(){
 
@@ -302,17 +348,19 @@ class LoginActivity: AppCompatActivity() {
                         sharedPref?.edit {
                             putString(VAR.PREF_TOKEN, datosPersona.getString("token"))
                             putString(VAR.PREF_DATA_USUARIO, datosPersona.toString())
+                            putString(VAR.PREF_CAMBIARRUTINA, "")
+
                         }
-                        Toasty.success(applicationContext, message, Toast.LENGTH_LONG, true).show()
+                        Toasty.success(applicationContext, message, Toast.LENGTH_SHORT, true).show()
                         mostrarMainActivity()
                     }else{
-                        Toasty.warning(applicationContext, message, Toast.LENGTH_LONG, true).show()
+                        Toasty.warning(applicationContext, message, Toast.LENGTH_SHORT, true).show()
                     }
                     loadingDialog?.dismiss()
                 },
                 Response.ErrorListener{
                     try {
-                        Toasty.error(applicationContext, "Error de conexión.", Toast.LENGTH_LONG, true).show()
+                        Toasty.error(applicationContext, "Error de conexión.", Toast.LENGTH_SHORT, true).show()
                         loadingDialog?.dismiss()
                         Log.e("myerror",  (it.message))
                         val nr = it.networkResponse
@@ -326,5 +374,6 @@ class LoginActivity: AppCompatActivity() {
 
             val requestQueue = Volley.newRequestQueue(this)
             requestQueue.add(request)
+        
     }
 }
