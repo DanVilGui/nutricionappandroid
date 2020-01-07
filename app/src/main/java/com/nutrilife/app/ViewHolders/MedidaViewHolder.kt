@@ -35,12 +35,16 @@ class MedidaViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     }
 
     fun bind(act: Context,  medida: ClsMedida) {
-        nPeso?.text = medida.peso.toString() +" kg"
-        nAltura?.text = medida.medida.toString() +" m"
+        medida.getEstado()
+        val peso = String.format("%.2f", medida.peso)
+        val altura = String.format("%.2f", medida.medida)
+        val imc = String.format("%.2f", medida.imc)
         nEstado?.text = medida.getEstado()
+        nPeso?.text = peso +" kg"
+        nAltura?.text = altura +" m"
         nCintura?.text = medida.cintura.toString() +" cm"
         nCadera?.text = medida.cadera.toString() + " cm"
-
+        nIMC?.text = imc
     }
 
 }

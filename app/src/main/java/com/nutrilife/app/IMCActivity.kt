@@ -144,11 +144,19 @@ class IMCActivity: AppCompatActivity() {
             val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
                 when(which){
                     DialogInterface.BUTTON_POSITIVE ->{
-
                         sharedPref?.edit {
                             putString(VAR.PREF_CAMBIARRUTINA, "1")
                         }
                         val intent = Intent(this, RutinasConocerActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+                        finish()
+                    }
+                    DialogInterface.BUTTON_NEGATIVE ->{
+                        sharedPref?.edit {
+                            putString(VAR.PREF_CAMBIARRUTINA, "")
+                        }
+                        val intent = Intent(this, EvaluacionActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                         finish()
@@ -174,7 +182,7 @@ class IMCActivity: AppCompatActivity() {
                 /*
                     enviar a preferencias !!!
                  */
-                val intent = Intent(applicationContext, MainActivity::class.java)
+                val intent = Intent(applicationContext, PreferenciasActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
                 finish()

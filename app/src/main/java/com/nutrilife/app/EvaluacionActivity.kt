@@ -82,7 +82,6 @@ class EvaluacionActivity: AppCompatActivity() {
                         val kcal = response.getInt("kcal")
                         txtKcal?.text = kcal.toString()
                         Toasty.success(applicationContext, message, Toast.LENGTH_SHORT, true).show()
-
                         val datosPersona = sharedPref?.getString(VAR.PREF_DATA_USUARIO, "")
                         if(datosPersona!="") {
                             val data = JSONObject(datosPersona)

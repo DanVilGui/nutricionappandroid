@@ -105,7 +105,6 @@ class RutinasTrabajoActivity: AppCompatActivity() {
                 when (true){
                     trabajo_ligero!=0-> {
                         listaRadioButtons!![0].performClick()
-
                         txtLigero?.selectedIndex = dataset.indexOf(trabajo_ligero.toString())
                     }
                     trabajo_casa!=0-> {

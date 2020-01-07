@@ -67,7 +67,10 @@ class MainActivity : AppCompatActivity() {
                     val ultimadieta = datos.getString("ultimadieta")
                     val dateFormat = SimpleDateFormat("yyyy-MM-dd")
                     val fechaActual = dateFormat.parse(DatePickerActivityFragment.formatFecha())
+                    Log.e("myerror",fechaActual.toString())
                     val fechaDieta = dateFormat.parse(ultimadieta)
+                    Log.e("myerror",fechaDieta.toString())
+
                     if (fechaDieta.before(fechaActual)){
                         val intent = Intent(this, ActualizarMedidasActivity::class.java)
                         intent.putExtra("control", true)

@@ -95,7 +95,7 @@
             android:id="@+id/fecha_nacimiento"
             android:layout_width="160dp"
             android:layout_height="30dp"
-            android:layout_gravity="center"
+            android:layout_gravity="bottom"
             android:gravity="center"
             android:background="@color/textWhite"
             android:clickable="false"
@@ -105,16 +105,16 @@
 
         <ImageView
             android:id="@+id/btnCalendario"
-            android:layout_width="30dp"
-            android:layout_height="25dp"
+            android:layout_width="43dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="4dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="4dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:foregroundGravity="right"
-            android:scaleType="fitXY"
             android:padding="1dp"
+            android:scaleType="fitXY"
             android:src="@drawable/boton_calendario"></ImageView>
 
     </LinearLayout>

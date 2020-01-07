@@ -26,13 +26,12 @@ class EvaluacionVerPlanActivity: AppCompatActivity() {
         val btnContinuar:Button = findViewById(R.id.btnContinuar)
         btnContinuar.setOnClickListener {
             if (SystemClock.elapsedRealtime() - lastClick >= 1000){
-                val intent = Intent(applicationContext, MainActivity::class.java)
+                val intent = Intent(applicationContext, LoginActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
                 finish()
             }
             lastClick = SystemClock.elapsedRealtime()
-
         }
     }
 
