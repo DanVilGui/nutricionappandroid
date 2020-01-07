@@ -24,6 +24,7 @@ import com.nutrilife.app.Adapters.DeporteListAdapter
 import com.nutrilife.app.Adapters.MedidaListAdapter
 import com.nutrilife.app.Clases.ClsMedida
 import com.nutrilife.app.Clases.VAR
+import com.nutrilife.app.MainActivity
 import com.nutrilife.app.R
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.rutina_deportes.*
@@ -44,6 +45,8 @@ class ProgresoFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_progreso, container, false)
         Handler().removeCallbacksAndMessages(null)
+        val mainActivity = activity as MainActivity
+        mainActivity.verificarFinDieta()
         sharedPref = activity?.getSharedPreferences(
             VAR.PREF_NAME,
             VAR.PRIVATE_MODE

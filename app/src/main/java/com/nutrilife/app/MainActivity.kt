@@ -17,6 +17,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.nutrilife.app.Clases.VAR
+import com.nutrilife.app.Fragments.AdvertenciaDietaDialog
 import org.json.JSONObject
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -58,6 +59,25 @@ class MainActivity : AppCompatActivity() {
             VAR.PREF_NAME,
             VAR.PRIVATE_MODE
         )
+        mostrarAdvertenciaDieta()
+        verificarFinDieta()
+        val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        val navController = findNavController(R.id.nav_host_fragment)
+        val appBarConfiguration = AppBarConfiguration(setOf(
+            R.id.navigation_hoy, R.id.navigation_progreso, R.id.navigation_menu))
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
+        navView.setItemIconTintList(null)
+
+    }
+    fun mostrarAdvertenciaDieta(){
+        val mostrar = sharedPref?.getString(VAR.PREF_ADVERTENCIA, "")
+        if(mostrar != ""){
+            val fragReferenciaDialog = AdvertenciaDietaDialog()
+            fragReferenciaDialog.show(supportFragmentManager, "dialogfrag")
+        }
+    }
+    fun verificarFinDieta(){
 
         val datosPersona = sharedPref?.getString(VAR.PREF_DATA_USUARIO, "")
         if(datosPersona!=""){
@@ -83,14 +103,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
-        val appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.navigation_hoy, R.id.navigation_progreso, R.id.navigation_menu))
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
-        navView.setItemIconTintList(null)
-
     }
 
     class DatePickerActivityFragment : DialogFragment() {

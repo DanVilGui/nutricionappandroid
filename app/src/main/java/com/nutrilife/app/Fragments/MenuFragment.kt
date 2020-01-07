@@ -31,6 +31,7 @@ import com.nutrilife.app.Adapters.MenuListAdapter
 import com.nutrilife.app.Clases.ClsMedida
 import com.nutrilife.app.Clases.ClsPersona
 import com.nutrilife.app.Clases.VAR
+import com.nutrilife.app.MainActivity
 import com.nutrilife.app.R
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_menu.*
@@ -54,7 +55,8 @@ class MenuFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_menu, container, false)
         Handler().removeCallbacksAndMessages(null)
-
+        val mainActivity = activity as MainActivity
+        mainActivity.verificarFinDieta()
         sharedPref = activity?.getSharedPreferences(
             VAR.PREF_NAME,
             VAR.PRIVATE_MODE

@@ -351,6 +351,7 @@ class LoginActivity: AppCompatActivity() {
                             putString(VAR.PREF_TOKEN, datosPersona.getString("token"))
                             putString(VAR.PREF_DATA_USUARIO, datosPersona.toString())
                             putString(VAR.PREF_CAMBIARRUTINA, "")
+                            putString(VAR.PREF_ADVERTENCIA, "")
 
                         }
                         Toasty.success(applicationContext, message, Toast.LENGTH_SHORT, true).show()

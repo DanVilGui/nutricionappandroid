@@ -50,6 +50,8 @@ class HoyFragment : Fragment() {
             VAR.PREF_NAME,
             VAR.PRIVATE_MODE
         )
+        val mainActivity = activity as MainActivity
+        mainActivity.verificarFinDieta()
         MainActivity.DatePickerActivityFragment.fechaHoy()
         recyclerView = view.findViewById(R.id.recyclerView)
        txtFechaFormat = view.findViewById(R.id.fecha)

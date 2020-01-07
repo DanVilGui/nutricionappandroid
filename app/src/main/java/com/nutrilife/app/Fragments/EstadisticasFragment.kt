@@ -30,6 +30,7 @@ import com.nutrilife.app.Adapters.MenuListAdapter
 import com.nutrilife.app.Clases.ClsMedida
 import com.nutrilife.app.Clases.ClsPersona
 import com.nutrilife.app.Clases.VAR
+import com.nutrilife.app.MainActivity
 import com.nutrilife.app.R
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_menu.*
@@ -59,6 +60,8 @@ class EstadisticasFragment : Fragment() {
             VAR.PREF_NAME,
             VAR.PRIVATE_MODE
         )
+
+
         val toolbar:Toolbar = view.findViewById(R.id.toolbar)
         toolbar.setNavigationOnClickListener {
             activity?.onBackPressed()

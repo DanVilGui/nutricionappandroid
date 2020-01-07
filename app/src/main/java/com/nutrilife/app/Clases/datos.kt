@@ -50,6 +50,7 @@ class VAR {
         val PREF_TEMP_RUTINA= "rutina_temporal"
         val PREF_CAMBIARRUTINA = "cambiar_rutina"
         val PREF_CAMBIARPREFERENCIA = "cambiar_preferencia"
+        val PREF_ADVERTENCIA = "mostrar_advertencia"
     }
 }
 
