@@ -5,6 +5,10 @@
     <string name="title_notifications">Notifications</string>
     <string name="facebook_app_id">2727391237309296</string>
     <string name="fb_login_protocol_scheme">fb2727391237309296</string>
+    <string name="login_cuenta"><u>Acceder con una cuenta</u></string>
+    <string name="login_cuenta_olvidaste"><u>Olvidaste tu contraseña?</u></string>
+    <string name="login_cuenta_registrarse">No tengo una cuenta</string>
+
     <string-array name="ceroAOcho">
         <item>0</item>
         <item>1</item>

@@ -12,4 +12,12 @@
         <item name="android:background">@drawable/bg_spinner</item>
     </style>
 
+    <style name="text_in_layout_error_hint_Style">
+        <item name="android:textColor">#FF0000</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="text_in_layout_hint_Style">
+        <item name="android:textColor">@color/textBLack</item>
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>

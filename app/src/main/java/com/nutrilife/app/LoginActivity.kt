@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -77,7 +78,6 @@ class LoginActivity: AppCompatActivity() {
 
         val btnLoginFacebook: BtnSocial = findViewById(R.id.btnLoginFacebook)
         btnLoginFacebook.setOnClickListener {
-
             LoginManager.getInstance()
                 .logInWithReadPermissions(this, Arrays.asList( "public_profile","email"));
         }
@@ -85,6 +85,12 @@ class LoginActivity: AppCompatActivity() {
         btnLoginGoogle.setOnClickListener {
             val signInIntent: Intent = mGoogleSignInClient!!.getSignInIntent()
             startActivityForResult(signInIntent, 101)
+        }
+
+        val txtAccederCuenta:TextView = findViewById(R.id.acceder_cuenta)
+        txtAccederCuenta.setOnClickListener {
+            val i = Intent(this, LoginCuentaActivity::class.java)
+            startActivity(i)
         }
     }
 

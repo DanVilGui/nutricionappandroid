@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/fondo_cuenta"
+    android:layout_gravity="center"
+    android:gravity="center">
+    <include
+        android:layout_gravity="center"
+        layout="@layout/logo"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginBottom="15dp"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:orientation="horizontal"
+                android:id="@+id/til_correo"
+                android:textColorHint="@color/textBLack"
+                app:errorTextAppearance="@style/text_in_layout_error_hint_Style"
+                app:hintTextAppearance="@style/text_in_layout_hint_Style"
+                app:errorEnabled="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_marginRight="10dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/icono_usuario"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"/>
+                    <EditText
+                        android:textColor="@color/textBLack"
+                        android:textColorHint="@color/textBLack"
+                        android:id="@+id/correo"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Correo eléctronico"
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true" />
+                </LinearLayout>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_contrasenia"
+                android:textColorHint="@color/textBLack"
+                android:layout_width="wrap_content"
+                app:errorTextAppearance="@style/text_in_layout_error_hint_Style"
+                app:hintTextAppearance="@style/text_in_layout_hint_Style"
+                app:errorEnabled="true"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_marginRight="10dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/icono_contrasenia"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"/>
+                    <EditText
+                        android:textColor="@color/textBLack"
+                        android:textColorHint="@color/textBLack"
+                        android:id="@+id/contrasenia"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Contraseña"
+                        android:inputType="textPassword"
+                        android:singleLine="true" />
+                </LinearLayout>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:id="@+id/btnLogin"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_radio_principal"
+            android:text="Iniciar Sesión"
+            android:textColor="@color/textBLack"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="17sp"
+            android:text="@string/login_cuenta_olvidaste"
+            android:textColor="@color/colorBlue"
+            android:padding="8dp"
+
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="17sp"
+            android:text="@string/login_cuenta_registrarse"
+            android:textColor="@color/colorRed"
+            android:padding="8dp"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+</LinearLayout>
