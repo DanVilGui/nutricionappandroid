@@ -3,11 +3,13 @@ package com.nutrilife.app
 import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
+import android.media.Image
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +21,8 @@ import com.android.volley.toolbox.Volley
 import com.nutrilife.app.Clases.ClsPersona
 import com.nutrilife.app.Clases.VAR
 import com.nutrilife.app.Clases.Validar
+import com.nutrilife.app.Fragments.AdvertenciaDietaDialog
+import com.nutrilife.app.Fragments.RegistrarCuentaDialog
 import es.dmoral.toasty.Toasty
 import org.json.JSONObject
 
@@ -26,13 +30,15 @@ import org.json.JSONObject
 class LoginCuentaActivity: AppCompatActivity() {
     var sharedPref: SharedPreferences? = null
     var lastClick: Long = 0
+    var lastClick2: Long = 0
+
     var loadingDialog: Dialog? = null
     var txtCorreo:EditText? = null
     var txtContrasenia:EditText? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_cuenta)
-        this.title = "Ingreso con cuenta"
+        this.title = "Ingresar con cuenta"
         // this.supportActionBar?.hide()
         sharedPref = getSharedPreferences(
             VAR.PREF_NAME,
@@ -47,16 +53,26 @@ class LoginCuentaActivity: AppCompatActivity() {
         val btnLogin:Button = findViewById(R.id.btnLogin)
         btnLogin.setOnClickListener {
             if (SystemClock.elapsedRealtime() - lastClick >= 1000) {
-                val valido = validarForm()!=null
-                if(valido){
+                if(validarForm()){
                     accederCuenta()
                 }
             }
             lastClick = SystemClock.elapsedRealtime()
         }
+        val registrar:TextView = findViewById(R.id.registrar)
+        registrar.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - lastClick2 >= 1000) {
+                val fragReferenciaDialog = RegistrarCuentaDialog()
+                fragReferenciaDialog.show(supportFragmentManager, "registrar")
+            }
+            lastClick2 = SystemClock.elapsedRealtime()
+        }
+
+
     }
 
-    fun validarForm():Boolean?{
+    fun validarForm():Boolean{
+
         if(Validar.vacio(txtCorreo)){
             Validar.txtErr(txtCorreo, "Ingrese correo electrónico" )
         }else if(! Validar.strEmail(txtCorreo)){
@@ -64,7 +80,8 @@ class LoginCuentaActivity: AppCompatActivity() {
         }else if(Validar.vacio(txtContrasenia)){
             Validar.txtErr(txtContrasenia, "Ingrese su contraseña" )
         }
-        return true
+        else return true
+        return false
     }
 
     fun mostrarEspereDialog(){
