@@ -42,13 +42,13 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <LinearLayout
         android:orientation="vertical"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="25dp"
         android:background="@drawable/border_estadisticas"
         android:layout_width="match_parent"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:padding="10dp"
-        android:layout_height="290dp">
+        android:layout_height="310dp">
         <TextView
             android:layout_marginTop="15dp"
             android:layout_marginBottom="20dp"

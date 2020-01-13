@@ -1,6 +1,7 @@
 package com.nutrilife.app.Fragments
 
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -10,6 +11,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
@@ -23,6 +26,7 @@ import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.RetryPolicy
+import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.nutrilife.app.Adapters.DeporteListAdapter
@@ -31,6 +35,7 @@ import com.nutrilife.app.Adapters.MenuListAdapter
 import com.nutrilife.app.Clases.ClsMedida
 import com.nutrilife.app.Clases.ClsPersona
 import com.nutrilife.app.Clases.VAR
+import com.nutrilife.app.Clases.VAR.Companion.url
 import com.nutrilife.app.MainActivity
 import com.nutrilife.app.R
 import es.dmoral.toasty.Toasty
@@ -48,6 +53,8 @@ class MenuFragment : Fragment() {
     var listaMenus :LinkedList<String> = LinkedList()
     var swipeRefreshLayout:SwipeRefreshLayout? = null
     var txtNombre:TextView?=null
+
+    var fotoUsuario:ImageView? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -67,6 +74,7 @@ class MenuFragment : Fragment() {
         swipeRefreshLayout?.setOnRefreshListener {
            buscarDatos()
         }
+        cargarImagen()
         buscarDatos()
         listaMenus.clear()
         listaMenus.addAll(asList("Modificar mi rutina","Tips de nutrición", "Mis Estadísticas", "Cerrar Sesión"))
@@ -77,11 +85,44 @@ class MenuFragment : Fragment() {
         }
 
 
-        /*
+        fotoUsuario = view.findViewById(R.id.fotousuario)
+        fotoUsuario?.setOnClickListener {
+            val dialog = SubirFotoDialog()
+            dialog.setTargetFragment(this, 130)
+            dialog.show(fragmentManager!!, "subirfoto")
+        }
 
-         */
+
 
         return view
+    }
+
+    fun cargarImagen (){
+        val request : ImageRequest = object : ImageRequest(
+            url("persona_imagen"),
+            Response.Listener { response ->
+
+                fotoUsuario?.setImageBitmap(response)
+            }, 0, 0, null, Bitmap.Config.RGB_565,
+            Response.ErrorListener{
+                try {
+                    Toasty.error(activity!!, "Error al mostrar la imagen.", Toast.LENGTH_LONG, true).show()
+                    Log.e("myerror",  (it.message))
+                    val nr = it.networkResponse
+                    val r = String(nr.data)
+                }catch (ex:Exception){
+                    Log.e("myerror", ex.message.toString())
+                }
+            }) {
+            override fun getHeaders(): Map<String, String> {
+                var params: MutableMap<String, String> = HashMap()
+                params["TOKEN"] =  sharedPref?.getString("token", "")!!
+                return params
+            }
+        }
+
+        val requestQueue = Volley.newRequestQueue(activity!!)
+        requestQueue.add(request)
     }
 
     fun buscarDatos(){
@@ -89,7 +130,6 @@ class MenuFragment : Fragment() {
         val request : JsonObjectRequest = object : JsonObjectRequest(
             Method.POST, VAR.url("persona_datos"), null,
             Response.Listener { response ->
-
                 val success = response.getBoolean("success")
                 if(success){
                     val datosPersona = response.getJSONObject("datos")
@@ -102,7 +142,6 @@ class MenuFragment : Fragment() {
 
                 }
                 swipeRefreshLayout?.isRefreshing = false
-
             },
             Response.ErrorListener{
                 try {

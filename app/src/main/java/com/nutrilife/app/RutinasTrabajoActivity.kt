@@ -74,7 +74,7 @@ class RutinasTrabajoActivity: AppCompatActivity() {
         val rbNinguno: RadioButton = findViewById(R.id.rbNinguno)
 
 
-        listaRadioButtons = mutableListOf(rbCasa, rbLigero, rbActivo, rbMuyActivo, rbNinguno)
+        listaRadioButtons = mutableListOf( rbLigero, rbCasa, rbActivo, rbMuyActivo, rbNinguno)
         listaRadioButtons?.forEach {
             it.setOnClickListener {
                 val copiaRb =  mutableListOf<RadioButton>()
@@ -101,7 +101,7 @@ class RutinasTrabajoActivity: AppCompatActivity() {
                 val trabajo_casa =  rutina.getInt("trabaja_casa")
                 val trabajo_activo =  rutina.getInt("trabaja_activo")
                 val trabajo_muyactivo =  rutina.getInt("trabaja_muyactivo")
-
+                Log.e("myerror", rutina.toString())
                 when (true){
                     trabajo_ligero!=0-> {
                         listaRadioButtons!![0].performClick()
@@ -121,7 +121,6 @@ class RutinasTrabajoActivity: AppCompatActivity() {
                     }
                     else->{
                         listaRadioButtons!![4].performClick()
-
                     }
 
                 }

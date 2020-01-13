@@ -1,17 +1,19 @@
 package com.nutrilife.app.Clases
 
-import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.*
 
 class ClsIMC(val peso:Double,val estatura:Double){
     var imc:Double = 0.0
     var estado:String = ""
     var texto:String = ""
+
     fun calcular(){
         imc = (peso/(estatura*estatura))
-        val df = DecimalFormat("#.##")
-        df.roundingMode = RoundingMode.CEILING
-        imc = df.format(imc).toDouble()
+        val format = DecimalFormat("#.#", DecimalFormatSymbols(Locale.US))
+        imc =  format.format(imc).toDouble()
+
         if(imc<16){
             estado = "DESNUTRICION III"
             texto = ""

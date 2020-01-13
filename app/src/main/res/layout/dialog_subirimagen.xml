@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:minWidth="280dp"
-    android:minHeight="390dp"
+    android:minHeight="370dp"
     android:layout_height="match_parent">
     <LinearLayout
         android:orientation="horizontal"
@@ -20,39 +20,34 @@
             android:layout_height="35dp">
         </ImageView>
     </LinearLayout>
-
-    <include
+    <ImageView
+        android:id="@+id/imagenPerfil"
+        android:layout_marginTop="10dp"
         android:layout_gravity="center"
-        layout="@layout/logo"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginBottom="10dp"/>
-    <TextView
-        android:id="@+id/txtTitulo"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:justificationMode="inter_word"
-        android:text="¡ATENCIÓN!"
-        android:textColor="@color/colorRed"
-        android:textAlignment="center"
-        ></TextView>
+        android:src="@drawable/usuariosinfoto"
+        android:layout_width="180dp"
+        android:layout_height="180dp"/>
 
-    <TextView
-        android:layout_marginRight="15dp"
+    <Button
+        android:layout_gravity="center"
         android:layout_marginTop="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginBottom="30dp"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
+        android:id="@+id/btnSeleccionar"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:text="Si sufres de alguna alergia o enfermedad crónica, consulta tu plan alimentacio con tu médico de confianza"
+        android:text="Seleccionar"
         android:textColor="@color/textBLack"
-        ></TextView>
+        android:textSize="16sp"
+        android:textStyle="bold"
+        />
+
+    <Button
+        android:layout_gravity="center"
+        android:id="@+id/btnSubir"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="Subir"
+        android:textStyle="bold"
+     />
+
 </LinearLayout>

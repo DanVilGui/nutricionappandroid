@@ -11,6 +11,10 @@
 
     <string name="login_cuenta_registrarse">No tengo una cuenta</string>
 
+    <string name="pedir_camera">Esta Aplicación necesita  el acceso de la camera.</string>
+    <string name="pedir_storage">Esta Aplicación necesita  el acceso al almacenamiento.</string>
+    <string name="label_seleccione_imagen">Selecciona una imagen.</string>
+
     <string-array name="ceroAOcho">
         <item>0</item>
         <item>1</item>

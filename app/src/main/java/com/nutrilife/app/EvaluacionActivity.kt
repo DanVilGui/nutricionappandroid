@@ -68,7 +68,6 @@ class EvaluacionActivity: AppCompatActivity() {
     fun procesarAlgoritmo(){
         loadingDialog?.setCancelable(false)
         loadingDialog?.setCanceledOnTouchOutside(false)
-
         loadingDialog?.show()
         PROCESAR_AGREGAR = false
         val request : JsonObjectRequest = object : JsonObjectRequest(
