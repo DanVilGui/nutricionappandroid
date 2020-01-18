@@ -14,7 +14,7 @@ data class ClsHorario(
             return hora*60 + min
         }
         var tolerancia = 30*60 // 30 minutos
-        val horariosRango: Array<String> = arrayOf( "06:00", "10:00", "13:30", "17:00", "21:00")
+        val horariosRango: Array<String> = arrayOf( "06:00", "10:00", "13:00", "17:00", "20:00")
     }
 }
 

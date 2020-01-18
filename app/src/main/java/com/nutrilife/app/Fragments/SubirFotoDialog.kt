@@ -2,6 +2,7 @@ package com.nutrilife.app.Fragments
 
 import android.Manifest
 import android.app.Dialog
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -12,6 +13,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
+import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
@@ -31,10 +33,13 @@ import com.android.volley.toolbox.Volley
 import com.nutrilife.app.Clases.VAR
 import com.nutrilife.app.R
 import es.dmoral.toasty.Toasty
+import id.zelory.compressor.Compressor
 import org.json.JSONObject
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.File
 
 
 class SubirFotoDialog: DialogFragment()  , EasyPermissions.PermissionCallbacks{
@@ -43,8 +48,11 @@ class SubirFotoDialog: DialogFragment()  , EasyPermissions.PermissionCallbacks{
     var encodedImage:String? = null
     var sharedPref: SharedPreferences? = null
     var lastClick:Long = 0
-    var loadingDialog: Dialog? = null
+    var lastClickBuscar:Long = 0
 
+    var loadingDialog: Dialog? = null
+    var imagenReferencial:Bitmap? = null
+    var buscarFoto = true
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,12 +70,23 @@ class SubirFotoDialog: DialogFragment()  , EasyPermissions.PermissionCallbacks{
             dismiss()
         }
 
+
         imagenPerfil = view.findViewById(R.id.imagenPerfil)
+        if(imagenReferencial!=null){
+            imagenPerfil?.setImageBitmap(imagenReferencial)
+        }
         btnSubir = view.findViewById(R.id.btnSubir)
         btnSubir?.visibility  = View.GONE
         val btnSeleccionar: Button = view.findViewById(R.id.btnSeleccionar)
         btnSeleccionar.setOnClickListener {
-            storageTask()
+            if (SystemClock.elapsedRealtime() - lastClickBuscar >= 1000){
+                if(buscarFoto){
+                    buscarFoto = false
+                    storageTask()
+
+                }
+            }
+            lastClickBuscar = SystemClock.elapsedRealtime()
         }
         val btnSubir: Button = view.findViewById(R.id.btnSubir)
         btnSubir.setOnClickListener {
@@ -149,19 +168,70 @@ class SubirFotoDialog: DialogFragment()  , EasyPermissions.PermissionCallbacks{
         requestQueue.add(request)
     }
 
+    private fun getRealPathFromURI( contentURI:Uri):Long {
+       val scheme = contentURI.scheme
+        var size:Long = 0
+        System.out.println("Scheme type " + scheme);
+        if(scheme.equals(ContentResolver.SCHEME_CONTENT))
+        {
+            try {
+                val fileInputStream= activity?.contentResolver?.openInputStream(contentURI)
+                size = fileInputStream?.available()!!.toLong()
+                return size
+            } catch (e:Exception) {
+                e.printStackTrace()
+                return 0
+            }
+        }
+        else if(scheme.equals(ContentResolver.SCHEME_FILE))
+        {
+            val path = contentURI.path
+            try {
+               val f =  File(path)
+                return f.length()
+            } catch ( e:Exception) {
+                e.printStackTrace()
+                return 0
+            }
+
+        }
+
+        return 0
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(requestCode == RC_SELECCION_IMAGEN){
             val uri = data!!.data
             if(uri !=null){
                 try {
-                    val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, uri)
-                    imagenPerfil?.setImageBitmap(bitmap)
-                    val baos =  ByteArrayOutputStream()
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
-                    val imageBytes = baos.toByteArray()
-                    encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT)
-                    btnSubir?.visibility  = View.VISIBLE
+                    var valid = true
+                    val size = getRealPathFromURI(uri)
+
+                    if(size>0){
+                        val nsize = size/(1024.0*1024)
+                        Log.e("myerror", "tamanio $nsize")
+
+                        if(nsize>2.0){
+                            Toasty.warning(activity!!, "El archivo supera 2mb!!", Toast.LENGTH_LONG, true).show()
+                            valid = false
+                        }
+                    }
+
+                    if(valid){
+
+
+                        val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, uri)
+                        val baos =  ByteArrayOutputStream()
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 0, baos)
+                        val decoded = BitmapFactory.decodeStream( ByteArrayInputStream(baos.toByteArray()))
+
+                        imagenPerfil?.setImageBitmap(decoded)
+
+                        val imageBytes = baos.toByteArray()
+                        encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT)
+                        btnSubir?.visibility  = View.VISIBLE
+                    }
+
 
                 }catch (ex:Exception){
                     btnSubir?.visibility  = View.GONE
@@ -190,7 +260,7 @@ class SubirFotoDialog: DialogFragment()  , EasyPermissions.PermissionCallbacks{
                 Manifest.permission.CAMERA
             )
         ) { // Have permission, do the thing!
-            Toast.makeText(activity, "TODO: SMS things", Toast.LENGTH_LONG).show()
+            //Toast.makeText(activity, "TODO: SMS things", Toast.LENGTH_LONG).show()
         } else { // Request one permission
             EasyPermissions.requestPermissions(
                 this, getString( R.string.pedir_camera),
@@ -206,6 +276,7 @@ class SubirFotoDialog: DialogFragment()  , EasyPermissions.PermissionCallbacks{
             )
         ) { // Have permission, do the thing!
 
+
             val intent = Intent(Intent.ACTION_GET_CONTENT)
                 .setType("image/*")
                 .addCategory(Intent.CATEGORY_OPENABLE)
@@ -215,13 +286,17 @@ class SubirFotoDialog: DialogFragment()  , EasyPermissions.PermissionCallbacks{
                     arrayOf("image/jpeg", "image/png")
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
             }
-
-            startActivityForResult(
+             startActivityForResult(
                 Intent.createChooser(
                     intent,
                     getString(R.string.label_seleccione_imagen)
                 ), RC_SELECCION_IMAGEN
             )
+
+            buscarFoto = true
+
+
+
 
         } else { // Request one permission
             EasyPermissions.requestPermissions(

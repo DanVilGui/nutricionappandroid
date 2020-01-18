@@ -53,8 +53,9 @@ class MenuFragment : Fragment() {
     var listaMenus :LinkedList<String> = LinkedList()
     var swipeRefreshLayout:SwipeRefreshLayout? = null
     var txtNombre:TextView?=null
-
     var fotoUsuario:ImageView? = null
+    var imagenUsuario:Bitmap? = null
+    var CargoImagen = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -87,9 +88,13 @@ class MenuFragment : Fragment() {
 
         fotoUsuario = view.findViewById(R.id.fotousuario)
         fotoUsuario?.setOnClickListener {
-            val dialog = SubirFotoDialog()
-            dialog.setTargetFragment(this, 130)
-            dialog.show(fragmentManager!!, "subirfoto")
+            if(CargoImagen){
+                val dialog = SubirFotoDialog()
+                dialog.imagenReferencial = imagenUsuario
+                dialog.setTargetFragment(this, 130)
+                dialog.show(fragmentManager!!, "subirfoto")
+            }
+
         }
 
 
@@ -101,11 +106,13 @@ class MenuFragment : Fragment() {
         val request : ImageRequest = object : ImageRequest(
             url("persona_imagen"),
             Response.Listener { response ->
-
+                imagenUsuario = response
+                CargoImagen = true
                 fotoUsuario?.setImageBitmap(response)
             }, 0, 0, null, Bitmap.Config.RGB_565,
             Response.ErrorListener{
                 try {
+                    CargoImagen= false
                     Toasty.error(activity!!, "Error al mostrar la imagen.", Toast.LENGTH_LONG, true).show()
                     Log.e("myerror",  (it.message))
                     val nr = it.networkResponse

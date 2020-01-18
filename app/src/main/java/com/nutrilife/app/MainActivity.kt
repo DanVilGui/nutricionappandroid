@@ -1,7 +1,8 @@
 package com.nutrilife.app
 
-import android.app.DatePickerDialog
-import android.app.Dialog
+import android.app.*
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -10,17 +11,19 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.nutrilife.app.Clases.HorarioAlarmaReceiver
+import com.nutrilife.app.Clases.Receiver
 import com.nutrilife.app.Clases.VAR
 import com.nutrilife.app.Fragments.AdvertenciaDietaDialog
 import org.json.JSONObject
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,9 +32,61 @@ class MainActivity : AppCompatActivity() {
 
     var sharedPref: SharedPreferences? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.notificacion_comida)
+            val descriptionText = getString(R.string.notificacion_comida_desc)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(getString(R.string.notificacion_comidaid), name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val alarmMgr = this.getSystemService(ALARM_SERVICE) as AlarmManager
+
+        val receiver = ComponentName(this, Receiver::class.java)
+        val broadcast = Receiver()
+        broadcast.registrar(this)
+        /*
+        var alarmIntent = Intent(this, HorarioAlarmaReceiver::class.java)
+        alarmIntent.putExtra("idhorario", 2+1)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            101,
+            alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 20)
+        calendar.set(Calendar.MINUTE, 10)
+        calendar.set(Calendar.SECOND, 0)
+
+        alarmMgr.setInexactRepeating(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
+
+         */
+
+//        broadcast.registrar(this)
+        /*
+        packageManager.setComponentEnabledSetting(
+            receiver,
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            PackageManager.DONT_KILL_APP
+        )
+
+         */
 
         /*
         try {

@@ -138,13 +138,13 @@ class HoyFragment : Fragment() {
 
                         listaDietas.clear()
                         val posPintado = pintarHorario()
+                        Log.e("myerror", "pintado: "+ posPintado.toString())
                         for (i in 0 until horarios.length()) {
                             val horarioStr = horarios.getJSONObject(i)
                             val idhorario = horarioStr.getInt("id")
                             val filtro = listaDietaHorario.filter { it.idhorario == idhorario }
                             val horario = ClsHorario(idhorario, horarioStr.getString("nombre"))
                             val block = ClsDietaBlock(horario, filtro)
-
                             if( posPintado == idhorario){
                                 block.pintar  = true
                             }
@@ -253,11 +253,15 @@ class HoyFragment : Fragment() {
             val minsActual = ClsHorario.indicadorHora(hora)
             Log.e("myerro", "hora "+ minsActual.toString())
 
-            for(i in horariosRango.indices){
-                Log.e("myerro", "horario "+ i +" " + ClsHorario.indicadorHora(horariosRango[i]))
-                if(minsActual < ClsHorario.indicadorHora(horariosRango[i])    ){
-                    return i
+
+            for(i in horariosRango.size-1 downTo 0) {
+                val horaMin =  ClsHorario.indicadorHora(horariosRango[i])
+
+                Log.e("myerro", "horahorario "+ horaMin.toString())
+                if(minsActual >horaMin   ){
+                    return i+1
                 }
+
             }
         }
         return -1

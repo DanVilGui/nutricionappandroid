@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">Nutrilife</string>
+    <string name="notificacion_comidaid">1010</string>
+
+    <string name="notificacion_comida">notifacioncomidas</string>
+    <string name="notificacion_comida_desc">notifacioncomidas</string>
+
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
