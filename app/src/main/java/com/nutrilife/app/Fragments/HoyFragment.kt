@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,6 +31,7 @@ import java.util.*
 import kotlin.concurrent.schedule
 
 class HoyFragment : Fragment() {
+
     var contenedorDietas:LinearLayout? = null
     var contenedorTerminar:LinearLayout? = null
     var sharedPref: SharedPreferences? = null
@@ -50,6 +52,11 @@ class HoyFragment : Fragment() {
             VAR.PREF_NAME,
             VAR.PRIVATE_MODE
         )
+        sharedPref?.edit {
+            putString(VAR.FECHA_HOY, fechaAndroid())
+        }
+
+
         val mainActivity = activity as MainActivity
         mainActivity.verificarFinDieta()
         MainActivity.DatePickerActivityFragment.fechaHoy()
@@ -95,9 +102,8 @@ class HoyFragment : Fragment() {
     }
 
     fun buscarDatos(){
-        recyclerView?.visibility = View.GONE
-        mensajedescanso?.visibility = View.GONE
 
+        mensajedescanso?.visibility = View.GONE
         val parser = SimpleDateFormat("yyyy-MM-dd")
         val fecha = parser.parse(MainActivity.DatePickerActivityFragment.fecha)
 
@@ -112,86 +118,127 @@ class HoyFragment : Fragment() {
         parameters.put("fecha", MainActivity.DatePickerActivityFragment.fecha)
         if(!swipeRefreshLayout!!.isRefreshing) swipeRefreshLayout?.isRefreshing = true
         mostrarTerminarDia(false)
-        val request : JsonObjectRequest = object : JsonObjectRequest(
-            Method.POST, VAR.url("persona_dieta_fecha"), parameters,
-            Response.Listener { response ->
-                val success = response.getBoolean("success")
-                val message = response.getString("message")
-                if(success){
-                    val info = response.getJSONObject("info")
-                    val asignado = info.getInt("asignado")
-                    val terminado = info.getInt("terminado")
-                    if(asignado == 1) {
-                        val dietas = response.getJSONArray("dieta")
-                        val horarios = response.getJSONArray("horarios")
-                        val listaDietaHorario = LinkedList<ClsDietaHorario>()
-                        for (j in 0 until dietas.length()) {
-                            val dieta = dietas.getJSONObject(j)
-                            listaDietaHorario.add(
-                                ClsDietaHorario(
-                                    dieta.getString("producto"),
-                                    dieta.getInt("idhorario"), dieta.getDouble("cantidad"),
-                                    dieta.getString("medida"), dieta.getString("fecha")
-                                )
-                            )
-                        }
 
-                        listaDietas.clear()
-                        val posPintado = pintarHorario()
-                        Log.e("myerror", "pintado: "+ posPintado.toString())
-                        for (i in 0 until horarios.length()) {
-                            val horarioStr = horarios.getJSONObject(i)
-                            val idhorario = horarioStr.getInt("id")
-                            val filtro = listaDietaHorario.filter { it.idhorario == idhorario }
-                            val horario = ClsHorario(idhorario, horarioStr.getString("nombre"))
-                            val block = ClsDietaBlock(horario, filtro)
-                            if( posPintado == idhorario){
-                                block.pintar  = true
-                            }
-                            listaDietas.add(block)
-                        }
+        if(( fechaPrefsHoy() == fechaSeleccionada() )&& getDietaHoy() != "" ){
+            Log.e("myerror", "carga desde prefs")
+            val json = JSONObject(getDietaHoy())
+            procesarResponseDieta(json)
+        }else{
+            Log.e("myerror", "carga desde webservice")
 
-                        mostrarTerminarDia( terminado == 0 && seTerminoDia() )
-                        adaptador?.notifyDataSetChanged()
-                        recyclerView?.visibility = View.VISIBLE
-                    }else{
-                        mensajedescanso?.visibility = View.VISIBLE
-                        mensajedescanso?.text = "Hoy es día libre, puedes comer a tu gusto. Mañana continuamos."
+            recyclerView?.visibility = View.GONE
+            val request : JsonObjectRequest = object : JsonObjectRequest(
+                Method.POST, VAR.url("persona_dieta_fecha"), parameters,
+                Response.Listener { response ->
+
+                    if(( fechaAndroid() == fechaSeleccionada() ) && getDietaHoy() == "" ){
+                        sharedPref?.edit {
+                            putString(VAR.FECHA_HOY, fechaAndroid())
+                            putString(VAR.DIETA_HOY, response.toString())
+                        }
                     }
-                }else{
-                    Toasty.error(activity!!, message, Toast.LENGTH_SHORT, true).show()
-                }
-                swipeRefreshLayout?.isRefreshing = false
 
-            },
-            Response.ErrorListener{
-                try {
-                    swipeRefreshLayout?.isRefreshing = true
-                    Toasty.error(activity!!, "Error de conexión.", Toast.LENGTH_SHORT, true).show()
-                    Log.e("myerror",  (it.message))
-                    val nr = it.networkResponse
-                    val r = String(nr.data)
-                }catch (ex:Exception){
-                    Log.e("myerror", ex.message.toString())
+                    procesarResponseDieta(response)
+
+                },
+                Response.ErrorListener{
+                    try {
+                        swipeRefreshLayout?.isRefreshing = true
+                        Toasty.error(activity!!, "Error de conexión.", Toast.LENGTH_SHORT, true).show()
+                        Log.e("myerror",  (it.message))
+                        val nr = it.networkResponse
+                        val r = String(nr.data)
+                    }catch (ex:Exception){
+                        Log.e("myerror", ex.message.toString())
+                    }
+                }) {
+                override fun getHeaders(): Map<String, String> {
+                    var params: MutableMap<String, String> = HashMap()
+                    params["TOKEN"] =  sharedPref?.getString("token", "")!!
+                    return params
                 }
-            }) {
-            override fun getHeaders(): Map<String, String> {
-                var params: MutableMap<String, String> = HashMap()
-                params["TOKEN"] =  sharedPref?.getString("token", "")!!
-                return params
             }
+
+
+            val requestQueue = Volley.newRequestQueue(activity!!)
+            requestQueue.add(request)
         }
+    }
 
+    fun procesarResponseDieta(response:JSONObject){
+        val success = response.getBoolean("success")
+        val message = response.getString("message")
+        if(success){
+            val info = response.getJSONObject("info")
+            val asignado = info.getInt("asignado")
+            val terminado = info.getInt("terminado")
+            if(asignado == 1) {
+                val dietas = response.getJSONArray("dieta")
+                val horarios = response.getJSONArray("horarios")
+                val listaDietaHorario = LinkedList<ClsDietaHorario>()
+                for (j in 0 until dietas.length()) {
+                    val dieta = dietas.getJSONObject(j)
+                    listaDietaHorario.add(
+                        ClsDietaHorario(
+                            dieta.getString("producto"),
+                            dieta.getInt("idhorario"), dieta.getDouble("cantidad"),
+                            dieta.getString("medida"), dieta.getString("fecha")
+                        )
+                    )
+                }
 
-        val requestQueue = Volley.newRequestQueue(activity!!)
-        requestQueue.add(request)
+                listaDietas.clear()
+                val posPintado = pintarHorario()
+                Log.e("myerror", "pintado: "+ posPintado.toString())
+                for (i in 0 until horarios.length()) {
+                    val horarioStr = horarios.getJSONObject(i)
+                    val idhorario = horarioStr.getInt("id")
+                    val filtro = listaDietaHorario.filter { it.idhorario == idhorario }
+                    val horario = ClsHorario(idhorario, horarioStr.getString("nombre"))
+                    val block = ClsDietaBlock(horario, filtro)
+                    if( posPintado == idhorario){
+                        block.pintar  = true
+                    }
+                    listaDietas.add(block)
+                }
+
+                mostrarTerminarDia( terminado == 0 && seTerminoDia() )
+                adaptador?.notifyDataSetChanged()
+                recyclerView?.visibility = View.VISIBLE
+            }else{
+                mensajedescanso?.visibility = View.VISIBLE
+                mensajedescanso?.text = "Hoy es día libre, puedes comer a tu gusto. Mañana continuamos."
+            }
+        }else{
+            Toasty.error(activity!!, message, Toast.LENGTH_SHORT, true).show()
+        }
+        swipeRefreshLayout?.isRefreshing = false
+    }
+
+    fun fechaPrefsHoy():String{
+        val s=  sharedPref?.getString(VAR.FECHA_HOY,"")
+        if(s==null) return ""
+        else return s
+    }
+
+    fun fechaSeleccionada():String{
+        return MainActivity.DatePickerActivityFragment.fecha
+    }
+
+    fun fechaAndroid():String{
+      return  MainActivity.DatePickerActivityFragment.formatFecha()
+    }
+    fun getDietaHoy():String{
+        val s=  sharedPref?.getString(VAR.DIETA_HOY,"")
+        if(s==null) return ""
+        else return s
     }
 
     fun actualizarDiaActual(){
         val handler = Handler()
         handler.postDelayed({
             var actualizar = true
-            if (MainActivity.DatePickerActivityFragment.formatFecha() == MainActivity.DatePickerActivityFragment.fecha) {
+            if ( fechaPrefsHoy() == fechaSeleccionada() ) {
                 if(recyclerView?.visibility == View.VISIBLE) {
                     try {
                         buscarDatos()
@@ -289,7 +336,7 @@ class HoyFragment : Fragment() {
             val hora = MainActivity.DatePickerActivityFragment.formatHora()
             val minsActual = ClsHorario.indicadorHora(hora)
             val minsCena = ClsHorario.indicadorHora(horariosRango[horariosRango.size-1])
-            if(minsActual> minsCena){
+            if(minsActual >= minsCena){
                 return true
             }
         }

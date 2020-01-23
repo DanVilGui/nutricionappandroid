@@ -35,13 +35,15 @@ class ClsPersona(val idpersona: Int, val idloginTipo:Int, val nombres:String, va
 class VAR {
     companion object {
 
-        val url: String = "https://dvilchez.ovh/nutricion/ws/"
+        val url: String = "http://192.168.1.110/nutricion/ws/"
         var ext: String = ".php"
         var ACTION_ACTUALIZAR_DIETA = 1
         fun url(m: String): String {
             return url +  m + ext
         }
-
+        fun urlExt(m: String, adic:String): String {
+            return url +  m   + adic
+        }
         val PRIVATE_MODE = 0
         val PREF_NAME = "nutrilife-app"
         val PREF_HOLA_ACTIVITY = "mostrar_hola_activity"
@@ -52,6 +54,8 @@ class VAR {
         val PREF_CAMBIARPREFERENCIA = "cambiar_preferencia"
         val PREF_ADVERTENCIA = "mostrar_advertencia"
         val PREF_CORREO = "correo"
+        val DIETA_HOY = "dieta_hoy"
+        val FECHA_HOY = "fecha_hoy"
 
     }
 }

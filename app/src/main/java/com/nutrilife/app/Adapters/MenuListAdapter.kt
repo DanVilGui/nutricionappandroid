@@ -67,13 +67,18 @@ class MenuListAdapter(val act : Context, val list: List<String>)
 
                 }
                 1->{
+                    //Tips de Nutricion
+                    val navHostFragment:NavHostFragment =
+                        activity.supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                    navHostFragment.navController.navigate(R.id.fragmentTipsResumen)
+                    /*
                     val url = VAR.url + "tips.pdf"
                     activity.startActivity(
                         Intent(
                             Intent.ACTION_VIEW,
                             Uri.parse(url)
                         )
-                    )
+                    )*/
 
                 }
                 2->{

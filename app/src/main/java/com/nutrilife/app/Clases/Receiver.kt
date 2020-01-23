@@ -21,8 +21,11 @@ class Receiver : BroadcastReceiver() {
 
         val horarios = ClsHorario.horariosRango
         val ahora: Calendar = Calendar.getInstance()
+        val hours = ahora.get(Calendar.HOUR_OF_DAY)
+        val mins = ahora.get(Calendar.MINUTE)
         ahora.set(Calendar.MINUTE, 0)
         ahora.set(Calendar.SECOND, 0)
+
 
 
         for (i in 0..horarios.size-1){
@@ -49,9 +52,16 @@ class Receiver : BroadcastReceiver() {
                 calendar.set(Calendar.HOUR_OF_DAY, hora)
                 calendar.set(Calendar.MINUTE, min)
                 calendar.set(Calendar.SECOND, 0)
-                if(calendar.timeInMillis < ahora.timeInMillis){
+
+                if(calendar.get(Calendar.DAY_OF_WEEK) == 1){
+                    calendar.add(Calendar.DATE, 1)
+                }else if(calendar.timeInMillis < ahora.timeInMillis){
+                    calendar.add(Calendar.DATE, 1)
+                }else if(calendar.get(Calendar.HOUR_OF_DAY) == hours &&
+                          mins - calendar.get(Calendar.MINUTE) > 10 ){
                     calendar.add(Calendar.DATE, 1)
                 }
+
                 Log.e("myerror", "Registrado $index")
                 Log.e("myerror", "timeinmillis :  ${calendar.timeInMillis}")
 

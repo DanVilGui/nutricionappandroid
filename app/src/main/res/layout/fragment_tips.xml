@@ -23,10 +23,10 @@ android:layout_height="match_parent" >
             android:background="@android:color/transparent"
             android:clickable="true"
             app:navigationIcon="?attr/homeAsUpIndicator"
-            app:title="Mis Estadísticas"></androidx.appcompat.widget.Toolbar>
+            app:title="Tips de Nutrición"></androidx.appcompat.widget.Toolbar>
 
-        <com.github.barteksc.pdfviewer.PDFView
-            android:id="@+id/pdfView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         </LinearLayout>

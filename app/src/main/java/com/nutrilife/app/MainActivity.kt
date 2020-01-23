@@ -47,46 +47,15 @@ class MainActivity : AppCompatActivity() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        val alarmMgr = this.getSystemService(ALARM_SERVICE) as AlarmManager
-
         val receiver = ComponentName(this, Receiver::class.java)
         val broadcast = Receiver()
         broadcast.registrar(this)
-        /*
-        var alarmIntent = Intent(this, HorarioAlarmaReceiver::class.java)
-        alarmIntent.putExtra("idhorario", 2+1)
-
-        val pendingIntent = PendingIntent.getBroadcast(
-            this,
-            101,
-            alarmIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        val calendar: Calendar = Calendar.getInstance()
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 20)
-        calendar.set(Calendar.MINUTE, 10)
-        calendar.set(Calendar.SECOND, 0)
-
-        alarmMgr.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY,
-            pendingIntent
-        )
-
-         */
-
-//        broadcast.registrar(this)
-        /*
         packageManager.setComponentEnabledSetting(
             receiver,
             PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
             PackageManager.DONT_KILL_APP
         )
 
-         */
 
         /*
         try {

@@ -28,4 +28,13 @@
         android:name="com.nutrilife.app.Fragments.EstadisticasFragment"
         />
 
+    <fragment
+        android:id="@+id/fragmentTipsResumen"
+        android:name="com.nutrilife.app.Fragments.TipsFragment"
+
+        />
+    <fragment
+        android:id="@+id/fragmentPost"
+        android:name="com.nutrilife.app.Fragments.PostFragment"
+        />
 </navigation>
