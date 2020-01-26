@@ -70,7 +70,6 @@ class PostFragment : Fragment() {
             texto.text = b.getString("texto")
             titulo.text = b.getString("titulo")
              image = b.getString("image","")
-
             liked = b.getBoolean("like")
             idPost = b.getInt("idpost")
             if(b.getByteArray("imagen")!=null){

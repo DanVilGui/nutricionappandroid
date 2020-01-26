@@ -108,7 +108,6 @@ class LoginActivity: AppCompatActivity() {
             callbackManager!!.onActivityResult(requestCode, resultCode, data)
         }
         super.onActivityResult(requestCode, resultCode, data)
-
     }
 
     fun mostrarEspereDialog(){
@@ -358,7 +357,6 @@ class LoginActivity: AppCompatActivity() {
                             putString(VAR.PREF_DATA_USUARIO, datosPersona.toString())
                             putString(VAR.PREF_CAMBIARRUTINA, "")
                             putString(VAR.PREF_ADVERTENCIA, "")
-
                         }
                         Toasty.success(applicationContext, message, Toast.LENGTH_SHORT, true).show()
                         mostrarMainActivity()
@@ -374,6 +372,7 @@ class LoginActivity: AppCompatActivity() {
                         Log.e("myerror",  (it.message))
                         val nr = it.networkResponse
                         val r = String(nr.data)
+
                     }catch (ex:Exception){
                         Log.e("myerror", ex.message.toString())
 

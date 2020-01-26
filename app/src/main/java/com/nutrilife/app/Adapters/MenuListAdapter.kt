@@ -98,6 +98,8 @@ class MenuListAdapter(val act : Context, val list: List<String>)
                                 sharedPreferences.edit {
                                     putString(VAR.PREF_TOKEN, "")
                                     putString(VAR.PREF_DATA_USUARIO, "")
+                                    putString(VAR.FECHA_HOY, "")
+                                    putString(VAR.DIETA_HOY, "")
                                 }
                                 Toasty.info(activity, "Gracias por usar la aplicación.", Toast.LENGTH_SHORT, false).show()
                                 val intent = Intent(activity, LoginActivity::class.java)

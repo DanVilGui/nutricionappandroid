@@ -23,12 +23,10 @@ import com.nutrilife.app.Clases.*
 import com.nutrilife.app.MainActivity
 import com.nutrilife.app.R
 import es.dmoral.toasty.Toasty
-import kotlinx.android.synthetic.main.fragment_hoy.*
 import org.json.JSONObject
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.concurrent.schedule
 
 class HoyFragment : Fragment() {
 
@@ -41,7 +39,7 @@ class HoyFragment : Fragment() {
     var txtFechaFormat:TextView?=null
     var recyclerView:RecyclerView ? = null
     var btnTerminar:Button? = null
-
+    var mensajeDescanso:TextView?    = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,12 +53,14 @@ class HoyFragment : Fragment() {
         sharedPref?.edit {
             putString(VAR.FECHA_HOY, fechaAndroid())
         }
+        
+        mensajeDescanso = view.findViewById(R.id.mensajedescanso)
+        recyclerView = view.findViewById(R.id.recyclerView)
 
-
+        
         val mainActivity = activity as MainActivity
         mainActivity.verificarFinDieta()
         MainActivity.DatePickerActivityFragment.fechaHoy()
-        recyclerView = view.findViewById(R.id.recyclerView)
        txtFechaFormat = view.findViewById(R.id.fecha)
         contenedorDietas = view.findViewById(R.id.contenedorDietas)
         contenedorTerminar = view.findViewById(R.id.contenedorTerminar)
@@ -103,7 +103,7 @@ class HoyFragment : Fragment() {
 
     fun buscarDatos(){
 
-        mensajedescanso?.visibility = View.GONE
+        mensajeDescanso?.visibility = View.GONE
         val parser = SimpleDateFormat("yyyy-MM-dd")
         val fecha = parser.parse(MainActivity.DatePickerActivityFragment.fecha)
 
@@ -120,8 +120,9 @@ class HoyFragment : Fragment() {
         mostrarTerminarDia(false)
 
         if(( fechaPrefsHoy() == fechaSeleccionada() )&& getDietaHoy() != "" ){
-            Log.e("myerror", "carga desde prefs")
+            Log.e("myerror", "carga desde prefs ")
             val json = JSONObject(getDietaHoy())
+            Log.e("myerror", json.toString())
             procesarResponseDieta(json)
         }else{
             Log.e("myerror", "carga desde webservice")
@@ -137,6 +138,9 @@ class HoyFragment : Fragment() {
                             putString(VAR.DIETA_HOY, response.toString())
                         }
                     }
+
+
+                    Log.e("myerrorhoy", response.toString() )
 
                     procesarResponseDieta(response)
 
@@ -205,9 +209,12 @@ class HoyFragment : Fragment() {
                 mostrarTerminarDia( terminado == 0 && seTerminoDia() )
                 adaptador?.notifyDataSetChanged()
                 recyclerView?.visibility = View.VISIBLE
-            }else{
-                mensajedescanso?.visibility = View.VISIBLE
-                mensajedescanso?.text = "Hoy es día libre, puedes comer a tu gusto. Mañana continuamos."
+            }
+            else{
+                Log.e("myerror", terminado.toString())
+                recyclerView?.visibility = View.GONE
+                mensajeDescanso?.visibility = View.VISIBLE
+                mensajeDescanso?.text = "Hoy es día libre, puedes comer a tu gusto. Mañana continuamos."
             }
         }else{
             Toasty.error(activity!!, message, Toast.LENGTH_SHORT, true).show()
@@ -259,12 +266,28 @@ class HoyFragment : Fragment() {
         val request : JsonObjectRequest = object : JsonObjectRequest(
             Method.POST, VAR.url("persona_terminar_dia"), null,
             Response.Listener { response ->
+
+                val json = JSONObject(getDietaHoy())
+                val info = json.getJSONObject("info")
+                info.put("terminado", 1)
+                json.put("info", info)
+
+
                 val success = response.getBoolean("success")
                 val message = response.getString("message")
                 if(success){
                     Toasty.success(activity!!, message, Toast.LENGTH_SHORT, true).show()
+                    sharedPref?.edit {
+                        putString(VAR.DIETA_HOY, json.toString())
+                    }
+
                 }else{
                     Toasty.error(activity!!, message, Toast.LENGTH_SHORT, true).show()
+                    if(message.contains("anterioridad")){
+                        sharedPref?.edit {
+                            putString(VAR.DIETA_HOY, json.toString())
+                        }
+                    }
                 }
                 swipeRefreshLayout?.isRefreshing = false
             },

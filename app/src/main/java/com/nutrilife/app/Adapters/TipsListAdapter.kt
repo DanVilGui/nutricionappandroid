@@ -100,7 +100,6 @@ class TipsListAdapter(val act : Context, val list: List<ClsPost>)
                 b.putString("titulo", tip.titulo)
                 b.putBoolean("like", tip.liked)
                 b.putString("image", tip.imagen)
-
                 if(tip.cargoImagen){
                     val bmap = holder.nImagen?.drawable!!.toBitmap()
                     val baos =  ByteArrayOutputStream()
@@ -141,7 +140,6 @@ class TipsListAdapter(val act : Context, val list: List<ClsPost>)
                 Response.Listener { response ->
                     val success = response.getBoolean("success")
                     val message = response.getString("message")
-                    tip.cargoImagen = true
                 },
                 Response.ErrorListener{
                     try {
@@ -172,6 +170,7 @@ class TipsListAdapter(val act : Context, val list: List<ClsPost>)
 
         val request : ImageRequest = object : ImageRequest(
         url, Response.Listener { response ->
+                tip.cargoImagen = true
                 holder.nImagen?.setImageBitmap(response)
             }, 0, 0, null, Bitmap.Config.RGB_565,
             Response.ErrorListener{

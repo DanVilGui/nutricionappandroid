@@ -83,7 +83,7 @@ class EstadisticasFragment : Fragment() {
                             terminadoStr+ "."
 
                     val values :  LinkedList<SliceValue> =  LinkedList()
-                    values.add(SliceValue(total.toFloat(), ChartUtils.COLOR_ORANGE))
+                    values.add(SliceValue(total.toFloat() - terminado.toFloat(), ChartUtils.COLOR_ORANGE))
                     values.add(SliceValue(terminado.toFloat(), ChartUtils.COLOR_GREEN))
                     val pieChartData = PieChartData(values)
                     pieChartData.setHasLabels(true)

@@ -83,7 +83,6 @@ class SubirFotoDialog: DialogFragment()  , EasyPermissions.PermissionCallbacks{
                 if(buscarFoto){
                     buscarFoto = false
                     storageTask()
-
                 }
             }
             lastClickBuscar = SystemClock.elapsedRealtime()
@@ -253,21 +252,7 @@ class SubirFotoDialog: DialogFragment()  , EasyPermissions.PermissionCallbacks{
 
     }
 
-      @AfterPermissionGranted(RC_CAMERA)
-    private fun cameraTask() {
-        if (EasyPermissions.hasPermissions(
-                context!!,
-                Manifest.permission.CAMERA
-            )
-        ) { // Have permission, do the thing!
-            //Toast.makeText(activity, "TODO: SMS things", Toast.LENGTH_LONG).show()
-        } else { // Request one permission
-            EasyPermissions.requestPermissions(
-                this, getString( R.string.pedir_camera),
-                RC_CAMERA, Manifest.permission.CAMERA
-            )
-        }
-    }
+
     @AfterPermissionGranted(RC_STORAGE)
     private fun storageTask() {
         if (EasyPermissions.hasPermissions(
@@ -276,6 +261,7 @@ class SubirFotoDialog: DialogFragment()  , EasyPermissions.PermissionCallbacks{
             )
         ) { // Have permission, do the thing!
 
+            buscarFoto = true
 
             val intent = Intent(Intent.ACTION_GET_CONTENT)
                 .setType("image/*")
@@ -293,16 +279,13 @@ class SubirFotoDialog: DialogFragment()  , EasyPermissions.PermissionCallbacks{
                 ), RC_SELECCION_IMAGEN
             )
 
-            buscarFoto = true
-
-
-
 
         } else { // Request one permission
             EasyPermissions.requestPermissions(
-                this, getString( R.string.pedir_camera),
-                RC_CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE
+                this, getString( R.string.pedir_storage),
+                RC_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE
             )
+            buscarFoto = true
         }
     }
 
