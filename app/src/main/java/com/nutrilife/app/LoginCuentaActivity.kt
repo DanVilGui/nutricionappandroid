@@ -22,6 +22,7 @@ import com.nutrilife.app.Clases.ClsPersona
 import com.nutrilife.app.Clases.VAR
 import com.nutrilife.app.Clases.Validar
 import com.nutrilife.app.Fragments.AdvertenciaDietaDialog
+import com.nutrilife.app.Fragments.RecuperarPassDialog
 import com.nutrilife.app.Fragments.RegistrarCuentaDialog
 import es.dmoral.toasty.Toasty
 import org.json.JSONObject
@@ -31,6 +32,7 @@ class LoginCuentaActivity: AppCompatActivity() {
     var sharedPref: SharedPreferences? = null
     var lastClick: Long = 0
     var lastClick2: Long = 0
+    var lastClick3: Long = 0
 
     var loadingDialog: Dialog? = null
     var txtCorreo:EditText? = null
@@ -67,7 +69,14 @@ class LoginCuentaActivity: AppCompatActivity() {
             }
             lastClick2 = SystemClock.elapsedRealtime()
         }
-
+        val recuperar:TextView = findViewById(R.id.olvidaste)
+        recuperar.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - lastClick3 >= 1000) {
+                val fragReferenciaDialog = RecuperarPassDialog()
+                fragReferenciaDialog.show(supportFragmentManager, "recuperar")
+            }
+            lastClick3 = SystemClock.elapsedRealtime()
+        }
 
     }
 

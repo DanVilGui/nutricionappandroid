@@ -49,7 +49,7 @@ class IMCActivity: AppCompatActivity() {
         )
         val lblIMC:TextView = findViewById(R.id.imc)
         val lblIMCTipo:TextView = findViewById(R.id.imcTipo)
-
+        val textoIMC:TextView = findViewById(R.id.imcTexto)
         val b = intent.extras
         if(b!=null){
             peso = b.getDouble("peso")
@@ -60,6 +60,7 @@ class IMCActivity: AppCompatActivity() {
             preguntar_actualizar_ruta = b.getBoolean("preguntar", false)
             val imc = ClsIMC(peso, medida)
             imc.calcular()
+            textoIMC.text = imc.texto
             valorImc = imc.imc
             lblIMC.text = imc.imc.toString()
             lblIMCTipo.text=imc.estado

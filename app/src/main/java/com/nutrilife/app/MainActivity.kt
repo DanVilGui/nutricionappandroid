@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity() {
             val day = arr[2].toInt()
             val now = System.currentTimeMillis() - 1000
             val datePickerDialog  = DatePickerDialog(activity!!, listener, year, month, day)
-            datePickerDialog.datePicker.maxDate = now+(1000*60*60*24*7)
+            datePickerDialog.datePicker.maxDate = now+(1000*60*60*24*14)
             return datePickerDialog
 
         }

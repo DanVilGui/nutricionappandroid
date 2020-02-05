@@ -50,10 +50,12 @@ class HoyFragment : Fragment() {
             VAR.PREF_NAME,
             VAR.PRIVATE_MODE
         )
-        sharedPref?.edit {
-            putString(VAR.FECHA_HOY, fechaAndroid())
+        if(sharedPref?.getString(VAR.FECHA_HOY,"")==""){
+            sharedPref?.edit {
+                putString(VAR.FECHA_HOY, fechaAndroid())
+            }
         }
-        
+
         mensajeDescanso = view.findViewById(R.id.mensajedescanso)
         recyclerView = view.findViewById(R.id.recyclerView)
 

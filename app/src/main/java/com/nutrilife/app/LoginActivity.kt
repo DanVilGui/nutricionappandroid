@@ -120,7 +120,8 @@ class LoginActivity: AppCompatActivity() {
     }
 
     fun loginFacebook(){
-        LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult?> {
+        LoginManager.getInstance().registerCallback(callbackManager, object :
+            FacebookCallback<LoginResult?> {
             override fun onSuccess(loginResult: LoginResult?) { // App code
                 mostrarEspereDialog()
                 val accessToken = AccessToken.getCurrentAccessToken()

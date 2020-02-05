@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/fondomainactivity"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="500dp"
+   >
+    <LinearLayout
+        android:layout_marginTop="0dp"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right">
+        <ImageView
+            android:id="@+id/close"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="15dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:src="@drawable/close"
+            android:layout_width="35dp"
+            android:layout_marginBottom="60dp"
+            android:layout_height="35dp">
+        </ImageView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_gravity="center"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:text="Recuperar Contraseña"
+            android:textColor="@color/colorPrimary"
+            android:textAlignment="center"
+            android:layout_marginBottom="10dp"
+            ></TextView>
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+                android:layout_marginLeft="4dp"
+
+                android:textColor="@color/textBLack"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Correo eléctronico"
+                />
+
+            <EditText
+                android:textColorHint="@color/textBLack"
+                android:textColor="@color/textBLack"
+                android:id="@+id/correo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ingrese correo electrónico"
+                android:inputType="textNoSuggestions|textEmailAddress"
+                android:singleLine="true" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:id="@+id/codigocontenedor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                >
+                <TextView
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/textBLack"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Código de Recuperación"
+                    />
+
+                <EditText
+                    android:textColorHint="@color/textBLack"
+                    android:textColor="@color/textBLack"
+                android:id="@+id/codigo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Ingrese su código de recuperación"
+                android:inputType="number"
+                android:singleLine="true" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                >
+                <TextView
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/textBLack"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Contraseña"
+                    />
+
+                <EditText
+                    android:textColorHint="@color/textBLack"
+                    android:textColor="@color/textBLack"
+                    android:id="@+id/pass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Ingrese su contraseña"
+                    android:inputType="text"
+                    android:singleLine="true" />
+            </LinearLayout>
+        </LinearLayout>
+        <CheckBox
+            android:id="@+id/tengocodigo"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:text="Tengo un Código de recuperación"
+            android:layout_height="20dp"/>
+        <Button
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:id="@+id/btnSolicitar"
+            android:layout_width="230dp"
+            android:layout_height="50dp"
+            android:background="@drawable/btn_radio_principal"
+            android:text="Recuperar"
+            android:textColor="@color/textBLack"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
