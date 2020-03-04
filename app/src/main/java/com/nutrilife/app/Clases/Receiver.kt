@@ -58,7 +58,7 @@ class Receiver : BroadcastReceiver() {
                 }else if(calendar.timeInMillis < ahora.timeInMillis){
                     calendar.add(Calendar.DATE, 1)
                 }else if(calendar.get(Calendar.HOUR_OF_DAY) == hours &&
-                          mins - calendar.get(Calendar.MINUTE) > 5 ){
+                          mins - calendar.get(Calendar.MINUTE) > 3 ){
                     calendar.add(Calendar.DATE, 1)
                 }
 

@@ -29,6 +29,7 @@ class EvaluacionVerPlanActivity: AppCompatActivity() {
             if (SystemClock.elapsedRealtime() - lastClick >= 1000){
                 sharedPref?.edit {
                     putString(VAR.PREF_ADVERTENCIA, "1")
+                    putString(VAR.FECHA_HOY, "")
                 }
                 val intent = Intent(applicationContext, LoginActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)

@@ -50,6 +50,7 @@ class HoyFragment : Fragment() {
             VAR.PREF_NAME,
             VAR.PRIVATE_MODE
         )
+
         if(sharedPref?.getString(VAR.FECHA_HOY,"")==""){
             sharedPref?.edit {
                 putString(VAR.FECHA_HOY, fechaAndroid())
@@ -134,7 +135,7 @@ class HoyFragment : Fragment() {
                 Method.POST, VAR.url("persona_dieta_fecha"), parameters,
                 Response.Listener { response ->
 
-                    if(( fechaAndroid() == fechaSeleccionada() ) && getDietaHoy() == "" ){
+                    if( fechaAndroid() == fechaSeleccionada()){
                         sharedPref?.edit {
                             putString(VAR.FECHA_HOY, fechaAndroid())
                             putString(VAR.DIETA_HOY, response.toString())
